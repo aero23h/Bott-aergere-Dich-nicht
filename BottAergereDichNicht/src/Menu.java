@@ -6,7 +6,7 @@ public class Menu {
 	public static void main(String[] args) throws IOException, CsvException {
 		Saves s = new Saves();
 		//s.saveCSV();
-		s.loadCSV();
+		s.loadCSV(); 
 		
 		Game g = new Game();
 		g.printBoard();
