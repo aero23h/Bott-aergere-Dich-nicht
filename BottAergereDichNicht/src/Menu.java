@@ -9,6 +9,6 @@ public class Menu {
 		s.loadCSV(); 
 		
 		Game g = new Game();
-		g.printBoard();
+		System.out.println(g.getGameBoard()[0][9]);
 	}
 }
