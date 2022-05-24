@@ -21,7 +21,7 @@ public class Saves {
       
 		CSVWriter writer = new CSVWriter(new FileWriter(new File(this.filePath)));
         writer.writeAll(data);
-		writer.close();
+		writer.close(); 
 	}
 	
 	public void loadCSV() throws IOException, CsvException {
