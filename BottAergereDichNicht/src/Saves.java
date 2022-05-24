@@ -19,18 +19,24 @@ public class Saves {
         data.add(new String[] { "Aman", "10", "620" });
         data.add(new String[] { "Suraj", "10", "630" });
       
-		CSVWriter writer = new CSVWriter(new FileWriter(new File(this.filePath)));
-        writer.writeAll(data);
-		writer.close();  
+		CSVWriterBuilder builder = new CSVWriterBuilder(new FileWriter(new File(this.filePath)));
+		builder.withSeparator(';');
+		ICSVWriter csvWriter = builder.build();
+		csvWriter.writeAll(data);
+        csvWriter.close();
 	}
 	
 	public void loadCSV() throws IOException, CsvException {
 	     CSVReader reader = new CSVReader(new FileReader(this.filePath));
-	     String[] heading = reader.readNext();
-		     for(String[] line : reader) {
-		    	 System.out.println(line[0] +" "+ line[1] +" "+ line[2]);
-		     }
-		reader.close();
+	     String[] h = reader.readNext();
+	     String[] header = h[0].replaceAll("\"", "").split(";");
+	     List<String[]> rows = reader.readAll();
+	     for(String[] e: rows) {
+	    	 String[] data = e[0].replaceAll("\"", "").split(";");
+	    	 System.out.println(header[0] +" "+ header[1]);
+	    	 System.out.println(data[0] +" "+ data[1]);
+	     }
+	     reader.close();
 	}
 
 }
