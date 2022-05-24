@@ -36,6 +36,7 @@ public class Saves {
 	    	 System.out.println(header[0] +" "+ header[1]);
 	    	 System.out.println(data[0] +" "+ data[1]);
 	     }
+	     reader.close();
 	}
 
 }
