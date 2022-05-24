@@ -28,13 +28,14 @@ public class Saves {
 	
 	public void loadCSV() throws IOException, CsvException {
 	     CSVReader reader = new CSVReader(new FileReader(this.filePath));
-	     String[] heading = reader.readNext();
-		     for(String[] line : reader) {
-		    	 for(String e: line) {
-		    		 System.out.println(e);
-		    	 }
-		     }
-		reader.close();
+	     String[] h = reader.readNext();
+	     String[] header = h[0].replaceAll("\"", "").split(";");
+	     List<String[]> rows = reader.readAll();
+	     for(String[] e: rows) {
+	    	 String[] data = e[0].replaceAll("\"", "").split(";");
+	    	 System.out.println(header[0] +" "+ header[1]);
+	    	 System.out.println(data[0] +" "+ data[1]);
+	     }
 	}
 
 }
