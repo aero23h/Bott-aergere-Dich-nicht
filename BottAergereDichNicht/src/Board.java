@@ -76,7 +76,6 @@ public class Board {
 		// update start
 		for(int i=0;i<this.score.getStartBoard().length; i++) {
 			int token = this.score.getStartBoard()[i];
-			System.out.println(token);
 			if(token > 0) {
 				actualBoard[this.posStart[i][1] ][this.posStart[i][0] ] = this.token2Board(token);
 			}

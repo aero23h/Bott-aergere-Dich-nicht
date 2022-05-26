@@ -32,7 +32,7 @@ public class Score {
 	
 	public void init(int playerCount) {
 		// TokenNumber AB-A is PlayerID, B is TokenNumber eg 13 - playerID B token 3
-		this.startBoard = new int[] {01,02,03,04,11,12,13,14,21,22,23,24,31,32,33,34};
+		this.startBoard = new int[] {01,03,02,04,11,12,13,14,21,22,23,24,31,33,32,34};
 		// Init startBoard between 2-4 playerID
 		if(playerCount>1 && playerCount<4) {
 			// remove token from list
@@ -92,6 +92,7 @@ public class Score {
 		// return true everything OK, false = something wrong
 		// find token in onBoard
 		int tokenPos = -1;
+		int playerID = token/10;
 		for(int i=0;i < this.onBoard.length; i++) {
 			if(this.onBoard[i] == token) {
 				tokenPos = i;
@@ -100,7 +101,27 @@ public class Score {
 		}
 		if(tokenPos > -1) {
 			// move token x steps
-			return true;
+			int newPos = (tokenPos + steps) % 40;
+			int boardSteps = (tokenPos + 40 - ((playerID*10+32) % 40)) % 40;
+			int goalPos = (newPos + 40 - ((playerID*10+32) % 40)) % 40;
+			// if token moved more than 40 --> into goalBoard
+			if(boardSteps > goalPos) {
+				if(this.goalBoard[(goalPos + (playerID+3)*4) % 16] == 0) {
+					this.goalBoard[(goalPos + (playerID+3)*4) % 16] = token;
+					this.onBoard[tokenPos] = 0;
+					return true;
+				}
+			}
+
+			// check if newPos is empty
+			if(this.onBoard[newPos] == 0) {
+				// set token to newPos
+				this.onBoard[newPos] = token;
+				// remove token from oldPos
+				this.onBoard[tokenPos] = 0;
+				return true;
+			}
+			return false;
 		}
 		// if not found, find token in goalBoard
 		for(int i=0;i < this.goalBoard.length; i++) {
@@ -115,8 +136,6 @@ public class Score {
 		}
 		// draw start token
 		if(steps == 6) {
-			// get player from token AB --> A
-			int playerID = (token / 10);
 			for(int i=0; i<4;i++) {
 				// counter i + playerNumber * 4
 				if(this.startBoard[i+playerID*4] == token) {
@@ -137,7 +156,7 @@ public class Score {
 		// check if token can put to board
 		if(this.onBoard[playerID*10] == 0) {
 			this.startBoard[removeIndex] = 0;
-			this.onBoard[playerID*10] = token;
+			this.onBoard[(playerID*10+32) % 40] = token;
 			return true;
 		}
 		return false;

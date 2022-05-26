@@ -9,9 +9,16 @@ public class Main {
 		Board b = new Board();
 		Color c = new Color();
 		
+		b.getScore().move(33, 6);
 		b.plotScore2Console();
-		b.getScore().move(24, 6);
+		b.getScore().move(33, 38);
 		b.plotScore2Console();
+		b.getScore().move(33, 3);
+		b.plotScore2Console();
+		b.getScore().move(33, 1);
+		b.plotScore2Console();
+		
+		b.getScore().save2File("score.json");
 	}
 
 }
