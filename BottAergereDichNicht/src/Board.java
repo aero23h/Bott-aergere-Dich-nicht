@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.Arrays;
 
 import com.fasterxml.jackson.core.exc.StreamWriteException;
 import com.fasterxml.jackson.databind.DatabindException;
@@ -59,16 +60,25 @@ public class Board {
 		return color.getReset() + "( )";
 	}
 	
+	public String[][] copyOf(String[][] sourceArray){
+		String[][] result = new String[sourceArray.length][sourceArray[0].length];
+		for(int line=0; line<sourceArray.length; line++) {
+			for(int row=0; row<sourceArray[line].length; row++) {
+				result[line][row] = sourceArray[line][row];
+			}
+		}
+		return result;
+	}
+	
 	public void plotScore2Console() {
 		// startup
-		String[][] actualBoard = this.emptyBoard;
+		String[][] actualBoard = this.copyOf(this.emptyBoard);
 		// update start
 		for(int i=0;i<this.score.getStartBoard().length; i++) {
 			int token = this.score.getStartBoard()[i];
+			System.out.println(token);
 			if(token > 0) {
 				actualBoard[this.posStart[i][1] ][this.posStart[i][0] ] = this.token2Board(token);
-			} else {
-				actualBoard[this.posStart[i][1] ][this.posStart[i][0] ] = this.clearTokenFromBoard();
 			}
 		}
 		// update goal
@@ -76,8 +86,6 @@ public class Board {
 			int token = this.score.getGoalBoard()[i];
 			if(token > 0) {
 				actualBoard[this.posGoal[i][1] ][this.posGoal[i][0] ] = this.token2Board(token);
-			} else {
-				actualBoard[this.posGoal[i][1] ][this.posGoal[i][0] ] = this.clearTokenFromBoard();
 			}
 		}
 		// update board
@@ -85,8 +93,6 @@ public class Board {
 			int token = this.score.getOnBoard()[i];
 			if(token > 0) {
 				actualBoard[this.posBoard[i][1] ][this.posBoard[i][0] ] = this.token2Board(token);
-			} else {
-				actualBoard[this.posBoard[i][1] ][this.posBoard[i][0] ] = this.clearTokenFromBoard();
 			}
 			
 		}
@@ -111,6 +117,10 @@ public class Board {
 
 	public void setScore(Score score) {
 		this.score = score;
+	}
+
+	public String[][] getEmptyBoard() {
+		return emptyBoard;
 	}
 
 }

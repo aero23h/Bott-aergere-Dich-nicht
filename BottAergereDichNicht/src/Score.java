@@ -137,7 +137,7 @@ public class Score {
 		// check if token can put to board
 		if(this.onBoard[playerID*10] == 0) {
 			this.startBoard[removeIndex] = 0;
-			this.onBoard[playerID*10] = (token);
+			this.onBoard[playerID*10] = token;
 			return true;
 		}
 		return false;
