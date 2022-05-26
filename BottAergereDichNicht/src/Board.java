@@ -49,10 +49,14 @@ public class Board {
 									{18,10}, {16,10}, {14,10}, {12,10}};
 	}
 	
-	public String token2Board(byte token) {
+	public String token2Board(int token) {
 		int playerId = token / 10;
 		String tokenChr = Character.toString(48 + token % 10);
 		return this.score.getPlayers()[playerId].getColor() + "("+tokenChr+")" + color.getReset();
+	}
+	
+	public String clearTokenFromBoard() {
+		return color.getReset() + "( )";
 	}
 	
 	public void plotScore2Console() {
@@ -60,24 +64,31 @@ public class Board {
 		String[][] actualBoard = this.emptyBoard;
 		// update start
 		for(int i=0;i<this.score.getStartBoard().length; i++) {
-			byte token = this.score.getStartBoard()[i];
+			int token = this.score.getStartBoard()[i];
 			if(token > 0) {
 				actualBoard[this.posStart[i][1] ][this.posStart[i][0] ] = this.token2Board(token);
+			} else {
+				actualBoard[this.posStart[i][1] ][this.posStart[i][0] ] = this.clearTokenFromBoard();
 			}
 		}
 		// update goal
 		for(int i=0;i<this.score.getGoalBoard().length; i++) {
-			byte token = this.score.getGoalBoard()[i];
+			int token = this.score.getGoalBoard()[i];
 			if(token > 0) {
 				actualBoard[this.posGoal[i][1] ][this.posGoal[i][0] ] = this.token2Board(token);
+			} else {
+				actualBoard[this.posGoal[i][1] ][this.posGoal[i][0] ] = this.clearTokenFromBoard();
 			}
 		}
 		// update board
 		for(int i=0;i<this.score.getOnBoard().length; i++) {
-			byte token = this.score.getOnBoard()[i];
+			int token = this.score.getOnBoard()[i];
 			if(token > 0) {
 				actualBoard[this.posBoard[i][1] ][this.posBoard[i][0] ] = this.token2Board(token);
+			} else {
+				actualBoard[this.posBoard[i][1] ][this.posBoard[i][0] ] = this.clearTokenFromBoard();
 			}
+			
 		}
 		// print board to console
 		for(int i = 0; i < actualBoard.length; i++) {

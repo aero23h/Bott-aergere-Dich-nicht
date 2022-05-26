@@ -4,13 +4,13 @@ public class Player {
 	private String color;
 	private int id;
 	
-	public Player() {
-		
+	public Player(String name, String color) {
+		this.name = name;
+		this.color = color;
 	}
 	
 	public Player(String name, String color, int id) {
-		this.name = name;
-		this.color = color;
+		this(name, color);
 		this.id = id;
 	}
 

@@ -12,9 +12,9 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 
 public class Score {
 
-	private byte[] startBoard;
-	private byte[] goalBoard;
-	private byte[] onBoard;
+	private int[] startBoard;
+	private int[] goalBoard;
+	private int[] onBoard;
 	private Player[] players; 
 	private Player noPlayer;
 	
@@ -32,7 +32,7 @@ public class Score {
 	
 	public void init(int playerCount) {
 		// TokenNumber AB-A is PlayerID, B is TokenNumber eg 13 - playerID B token 3
-		this.startBoard = new byte[] {01,02,03,04,11,12,13,14,21,22,23,24,31,32,33,34};
+		this.startBoard = new int[] {01,02,03,04,11,12,13,14,21,22,23,24,31,32,33,34};
 		// Init startBoard between 2-4 playerID
 		if(playerCount>1 && playerCount<4) {
 			// remove token from list
@@ -44,13 +44,32 @@ public class Score {
 				this.players[id] = this.getNoPlayer();
 			}
 		}
-		this.goalBoard = new byte[16];
-		this.onBoard = new byte[40];
+		this.goalBoard = new int[16];
+		this.onBoard = new int[40];
 		
 	}
-	public void setPlayer(int id, String name, String color) {
-		this.getPlayers()[id].setName(name);
-		this.getPlayers()[id].setColor(color);
+	
+	public void setPlayer(Player player) {
+		int id = -1;
+		switch(player.getColor()) {
+			// blue
+			case "\u001b[34m":
+				id = 0;
+				break;
+				// green
+			case "\u001b[32m":
+				id = 1;
+				break;
+				// red
+			case "\u001b[31m":
+				id = 2;
+				break;
+				// yellow
+			case "\u001b[33m":
+				id = 3;
+				break;
+		}
+		this.getPlayers()[id].setName(player.getName());
 	}
 	
 	public void save2File(String fileName) throws StreamWriteException, DatabindException, IOException {
@@ -69,7 +88,7 @@ public class Score {
 	    this.noPlayer = loadedData.getNoPlayer();
 	}
 	
-	public boolean move(byte token, byte steps) {
+	public boolean move(int token, int steps) {
 		// return true everything OK, false = something wrong
 		// find token in onBoard
 		int tokenPos = -1;
@@ -83,7 +102,7 @@ public class Score {
 			// move token x steps
 			return true;
 		}
-		// if not found, find token in offBoard
+		// if not found, find token in goalBoard
 		for(int i=0;i < this.goalBoard.length; i++) {
 			if(this.goalBoard[i] == token) {
 				tokenPos = i;
@@ -102,34 +121,49 @@ public class Score {
 				// counter i + playerNumber * 4
 				if(this.startBoard[i+playerID*4] == token) {
 					// draw token to start
-					return true;
+					if(this.tokenToBoard(i+playerID*4, token)) {
+						return true;
+					}
+					return false;
 				}
 			}
 		}
 		return false;
 	}
+	
+	public boolean tokenToBoard(int removeIndex, int token) {
+		// token AB -A playerID
+		int playerID = (token / 10);
+		// check if token can put to board
+		if(this.onBoard[playerID*10] == 0) {
+			this.startBoard[removeIndex] = 0;
+			this.onBoard[playerID*10] = (token);
+			return true;
+		}
+		return false;
+	}
 
-	public byte[] getStartBoard() {
+	public int[] getStartBoard() {
 		return startBoard;
 	}
 
-	public void setStartBoard(byte[] startBoard) {
+	public void setStartBoard(int[] startBoard) {
 		this.startBoard = startBoard;
 	}
 
-	public byte[] getGoalBoard() {
+	public int[] getGoalBoard() {
 		return goalBoard;
 	}
 
-	public void setGoalBoard(byte[] goalBoard) {
+	public void setGoalBoard(int[] goalBoard) {
 		this.goalBoard = goalBoard;
 	}
 
-	public byte[] getOnBoard() {
+	public int[] getOnBoard() {
 		return onBoard;
 	}
 
-	public void setOnBoard(byte[] onBoard) {
+	public void setOnBoard(int[] onBoard) {
 		this.onBoard = onBoard;
 	}
 
