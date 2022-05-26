@@ -1,0 +1,27 @@
+{
+  "startBoard" : "AQIDBAsMDQ4VFhcYHyAhIg==",
+  "goalBoard" : "AAAAAAAAAAAAAAAAAAAAAA==",
+  "onBoard" : "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+  "players" : [ {
+    "name" : "alex",
+    "color" : "\u001B[34m",
+    "id" : 0
+  }, {
+    "name" : "Player B",
+    "color" : "\u001B[32m",
+    "id" : 1
+  }, {
+    "name" : "Player C",
+    "color" : "\u001B[31m",
+    "id" : 2
+  }, {
+    "name" : "Player D",
+    "color" : "\u001B[33m",
+    "id" : 3
+  } ],
+  "noPlayer" : {
+    "name" : "",
+    "color" : "\u001B[0m",
+    "id" : -1
+  }
+}

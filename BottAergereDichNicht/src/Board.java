@@ -1,4 +1,12 @@
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+
+import com.fasterxml.jackson.core.exc.StreamWriteException;
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
+import com.fasterxml.jackson.databind.DatabindException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 
 public class Board {
 	private Score score;
@@ -29,7 +37,7 @@ public class Board {
 	private Color color;
 	private String[] playerColor;
 						
-	public Board() {
+	public Board() throws StreamWriteException, DatabindException, IOException {
 		this.posStart = new int[][] {{17,17}, {18,17}, {17,18}, {18,18},
 									{2,17}, {2,18}, {3,17}, {3,18},
 									{2,2}, {2,3}, {3,2}, {3,3},
@@ -44,20 +52,29 @@ public class Board {
 									{10,2}, {10,4}, {10,6}, {10,8},
 									{18,10}, {16,10}, {14,10}, {12,10}};
 		this.color = new Color();
-		this.playerColor = new String[] {color.getPcBlue(), color.getPcGreen(), color.getPcRed(), color.getPcYellow()};
 		this.score = new Score();
+		
+		// dummy test
+		//this.score.setPlayer(0, "alex", color.getPcBlue());
+		
+		//this.score.save2File("Testscore.json");
+		
+		this.score.loadFromFile("Testscore.json");
 		
 		
 		
 	}
+	
+	
 	public String token2Board(byte token) {
-		int player = token / 10;
+		int playerId = token / 10;
 		String tokenChr = Character.toString(48 + token % 10);
-		return this.playerColor[player]+"("+tokenChr+")"+color.getPcReset();
+		return this.score.getPlayers()[playerId].getColor() + "("+tokenChr+")" + color.getPcReset();
 	}
 	
 	
 	public void plotScore2Console() {
+		// startup
 		String[][] actualBoard = this.emptyBoard;
 		// update start
 		for(int i=0;i<this.score.getStartBoard().length; i++) {
@@ -80,12 +97,17 @@ public class Board {
 				actualBoard[this.posBoard[i][1] ][this.posBoard[i][0] ] = this.token2Board(token);
 			}
 		}
-		
 		// print board to console
 		for(int i = 0; i < actualBoard.length; i++) {
+			String line = "";
 			for(int j = 0; j < actualBoard[0].length; j++) {
-				System.out.print(actualBoard[i][j]);
-			}System.out.print("\n");
+				line += actualBoard[i][j];
+			}
+		// add player to board
+		if(i>2 && i<7) {
+			line += this.score.getPlayers()[i-3].getColor()+"        Player "+ (i-2) + ": " + this.score.getPlayers()[i-3].getName()+color.getPcReset();
+		}
+		System.out.println(line);
 		}
 		
 	}
