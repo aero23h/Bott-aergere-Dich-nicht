@@ -1,12 +1,7 @@
 import java.io.IOException;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 
 import com.fasterxml.jackson.core.exc.StreamWriteException;
-import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.DatabindException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 
 public class Board {
 	private Score score;
@@ -35,7 +30,6 @@ public class Board {
 	private int[][] posBoard;
 	private int[][] posGoal;
 	private Color color;
-	private String[] playerColor;
 						
 	public Board() throws StreamWriteException, DatabindException, IOException {
 		this.posStart = new int[][] {{17,17}, {18,17}, {17,18}, {18,18},
@@ -71,7 +65,6 @@ public class Board {
 		String tokenChr = Character.toString(48 + token % 10);
 		return this.score.getPlayers()[playerId].getColor() + "("+tokenChr+")" + color.getPcReset();
 	}
-	
 	
 	public void plotScore2Console() {
 		// startup
