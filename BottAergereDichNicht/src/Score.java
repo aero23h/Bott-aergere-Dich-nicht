@@ -21,11 +21,11 @@ public class Score {
 	public Score() {
 		Color color = new Color();
 		this.players = new Player[4];
-		this.players[0] = new Player("Player A", color.getPcBlue(), 0);
-		this.players[1] = new Player("Player B", color.getPcGreen(), 1);
-		this.players[2] = new Player("Player C", color.getPcRed(), 2);
-		this.players[3] = new Player("Player D", color.getPcYellow(), 3);
-		this.noPlayer = new Player("", color.getPcReset(), -1);
+		this.players[0] = new Player("Player A", color.getBlue(), 0);
+		this.players[1] = new Player("Player B", color.getGreen(), 1);
+		this.players[2] = new Player("Player C", color.getRed(), 2);
+		this.players[3] = new Player("Player D", color.getYellow(), 3);
+		this.noPlayer = new Player("", color.getReset(), -1);
 		
 		this.init(4);
 	}
@@ -44,7 +44,6 @@ public class Score {
 				this.players[id] = this.getNoPlayer();
 			}
 		}
-		
 		this.goalBoard = new byte[16];
 		this.onBoard = new byte[40];
 		
@@ -69,7 +68,6 @@ public class Score {
 	    this.players = loadedData.getPlayers();
 	    this.noPlayer = loadedData.getNoPlayer();
 	}
-	
 	
 	public boolean move(byte token, byte steps) {
 		// return true everything OK, false = something wrong

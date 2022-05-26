@@ -8,6 +8,8 @@ public class Main {
 	public static void main(String[] args) throws StreamWriteException, DatabindException, IOException{
 		Board b = new Board();
 		b.plotScore2Console();
+		
+		b.
 
 	}
 

@@ -1,46 +1,67 @@
 
 public class Color {
-	private String pcRed = "\u001b[31m";
-	private String pcGreen = "\u001b[32m";
-	private String pcBlue = "\u001b[34m";
-	private String pcYellow = "\u001b[33m";
-	private String pcWhite = "\u001b[37m";
-	private String pcReset = "\u001b[0m";
-	public String getPcRed() {
-		return pcRed;
+	private String red;
+	private String green;
+	private String blue;
+	private String yellow;
+	private String white;
+	private String reset;
+	
+	public Color() {
+		this.red = "\u001b[31m";
+		this.green = "\u001b[32m";
+		this.blue = "\u001b[34m";
+		this.yellow = "\u001b[33m";
+		this.white = "\u001b[37m";
+		this.reset = "\u001b[0m";
 	}
-	public void setPcRed(String pcRed) {
-		this.pcRed = pcRed;
+
+	public String getRed() {
+		return red;
 	}
-	public String getPcGreen() {
-		return pcGreen;
+
+	public void setRed(String red) {
+		this.red = red;
 	}
-	public void setPcGreen(String pcGreen) {
-		this.pcGreen = pcGreen;
+
+	public String getGreen() {
+		return green;
 	}
-	public String getPcBlue() {
-		return pcBlue;
+
+	public void setGreen(String green) {
+		this.green = green;
 	}
-	public void setPcBlue(String pcBlue) {
-		this.pcBlue = pcBlue;
+
+	public String getBlue() {
+		return blue;
 	}
-	public String getPcYellow() {
-		return pcYellow;
+
+	public void setBlue(String blue) {
+		this.blue = blue;
 	}
-	public void setPcYellow(String pcYellow) {
-		this.pcYellow = pcYellow;
+
+	public String getYellow() {
+		return yellow;
 	}
-	public String getPcWhite() {
-		return pcWhite;
+
+	public void setYellow(String yellow) {
+		this.yellow = yellow;
 	}
-	public void setPcWhite(String pcWhite) {
-		this.pcWhite = pcWhite;
+
+	public String getWhite() {
+		return white;
 	}
-	public String getPcReset() {
-		return pcReset;
+
+	public void setWhite(String white) {
+		this.white = white;
 	}
-	public void setPcReset(String pcReset) {
-		this.pcReset = pcReset;
+
+	public String getReset() {
+		return reset;
+	}
+
+	public void setReset(String reset) {
+		this.reset = reset;
 	}
 
 }

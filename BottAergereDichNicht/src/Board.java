@@ -32,6 +32,8 @@ public class Board {
 	private Color color;
 						
 	public Board() throws StreamWriteException, DatabindException, IOException {
+		this.color = new Color();
+		this.score = new Score();
 		this.posStart = new int[][] {{17,17}, {18,17}, {17,18}, {18,18},
 									{2,17}, {2,18}, {3,17}, {3,18},
 									{2,2}, {2,3}, {3,2}, {3,3},
@@ -45,25 +47,12 @@ public class Board {
 									{2,10}, {4,10}, {6,10}, {8,10},
 									{10,2}, {10,4}, {10,6}, {10,8},
 									{18,10}, {16,10}, {14,10}, {12,10}};
-		this.color = new Color();
-		this.score = new Score();
-		
-		// dummy test
-		//this.score.setPlayer(0, "alex", color.getPcBlue());
-		
-		//this.score.save2File("Testscore.json");
-		
-		this.score.loadFromFile("Testscore.json");
-		
-		
-		
 	}
-	
 	
 	public String token2Board(byte token) {
 		int playerId = token / 10;
 		String tokenChr = Character.toString(48 + token % 10);
-		return this.score.getPlayers()[playerId].getColor() + "("+tokenChr+")" + color.getPcReset();
+		return this.score.getPlayers()[playerId].getColor() + "("+tokenChr+")" + color.getReset();
 	}
 	
 	public void plotScore2Console() {
@@ -98,7 +87,7 @@ public class Board {
 			}
 		// add player to board
 		if(i>2 && i<7) {
-			line += this.score.getPlayers()[i-3].getColor()+"        Player "+ (i-2) + ": " + this.score.getPlayers()[i-3].getName()+color.getPcReset();
+			line += this.score.getPlayers()[i-3].getColor()+"        Player "+ (i-2) + ": " + this.score.getPlayers()[i-3].getName()+color.getReset();
 		}
 		System.out.println(line);
 		}
