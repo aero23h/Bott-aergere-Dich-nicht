@@ -4,6 +4,10 @@ public class Player {
 	private String color;
 	private int id;
 	
+	public Player() {
+		
+	}
+	
 	public Player(String name, String color) {
 		this.name = name;
 		this.color = color;
