@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.ArrayList;
 
 import com.fasterxml.jackson.core.exc.StreamWriteException;
 import com.fasterxml.jackson.databind.DatabindException;
@@ -69,7 +70,9 @@ public class Board {
 		return result;
 	}
 	
-	public void plotScore2Console() {
+	public void plotScore2Console(ArrayList<String> menu) {
+		// clear console
+		this.clearConsole();
 		// startup
 		String[][] actualBoard = this.copyOf(this.emptyBoard);
 		// update start
@@ -104,9 +107,19 @@ public class Board {
 		if(i>2 && i<7) {
 			line += this.score.getPlayers()[i-3].getColor()+"        Player "+ (i-2) + ": " + this.score.getPlayers()[i-3].getName()+color.getReset();
 		}
+		// add menu
+		if(i>9 && ((i-10) < menu.size())) {
+			line += "        " + menu.get(i-10);
+		}
 		System.out.println(line);
 		}
 		
+	}
+	
+	public void clearConsole() {
+		for(int i=0; i<20;i++) {
+			System.out.println();
+		}
 	}
 
 	public Score getScore() {

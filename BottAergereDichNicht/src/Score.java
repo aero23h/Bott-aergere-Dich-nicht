@@ -132,6 +132,13 @@ public class Score {
 		}
 		if(tokenPos > -1) {
 			// move token in goalBoard
+			int newGoalPos = tokenPos + steps;
+			// check if move is possible
+			if(newGoalPos > (playerID*4+15)%16) {
+				return false;
+			}
+			this.goalBoard[tokenPos] = 0;
+			this.goalBoard[newGoalPos] = token;
 			return true;
 		}
 		// draw start token

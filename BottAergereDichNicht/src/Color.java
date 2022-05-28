@@ -17,7 +17,7 @@ public class Color {
 	}
 
 	public String getRed() {
-		return red;
+		return this.red;
 	}
 
 	public void setRed(String red) {
@@ -25,7 +25,7 @@ public class Color {
 	}
 
 	public String getGreen() {
-		return green;
+		return this.green;
 	}
 
 	public void setGreen(String green) {
@@ -33,7 +33,7 @@ public class Color {
 	}
 
 	public String getBlue() {
-		return blue;
+		return this.blue;
 	}
 
 	public void setBlue(String blue) {
@@ -41,7 +41,7 @@ public class Color {
 	}
 
 	public String getYellow() {
-		return yellow;
+		return this.yellow;
 	}
 
 	public void setYellow(String yellow) {
@@ -49,7 +49,7 @@ public class Color {
 	}
 
 	public String getWhite() {
-		return white;
+		return this.white;
 	}
 
 	public void setWhite(String white) {
@@ -57,7 +57,7 @@ public class Color {
 	}
 
 	public String getReset() {
-		return reset;
+		return this.reset;
 	}
 
 	public void setReset(String reset) {
