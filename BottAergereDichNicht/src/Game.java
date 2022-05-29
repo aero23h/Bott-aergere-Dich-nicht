@@ -46,7 +46,22 @@ public class Game {
 		return "";
 	}
 	
-	public void run() throws IOException {
+	public void run() throws IOException {	
+		while(this.isRunning) {
+			for(Player p: this.board.getScore().getPlayers()) {
+				int steps = this.board.getScore().roll();
+				this.board.plotScore2Console();
+				System.out.println("Gewürfelt wurde eine: " + steps);
+				System.out.println(p.getColor() + p.getName() + " Ist am zuge" + new Color().getReset());
+				int token = this.intInput() + p.getId()*10;
+				this.board.getScore().move(token, steps);
+				if(this.board.hasWon(p)) {
+					this.isRunning = false;
+					System.out.println("Gewonnen!");
+					break;
+				}
+			}
+		}
 		
 	}
 		

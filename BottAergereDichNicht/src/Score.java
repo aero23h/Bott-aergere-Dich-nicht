@@ -1,6 +1,7 @@
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Random;
 
 import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.core.exc.StreamWriteException;
@@ -50,7 +51,7 @@ public class Score {
 		
 	}
 	
-	public void setPlayer(Player player) {
+	public void setPlayerByColor(Player player) {
 		int id = -1;
 		switch(player.getColor()) {
 			// blue
@@ -73,10 +74,31 @@ public class Score {
 		this.getPlayers()[id].setName(player.getName());
 	}
 	
-	public void save2File(String path) throws StreamWriteException, DatabindException, IOException {
+	public void setPlayer(Player player, int id) {
+		this.getPlayers()[id].setName(player.getName());
+		this.getPlayers()[id].setColor(player.getColor());
+	}
+	
+	public void save2File(String path, String name) throws StreamWriteException, DatabindException, IOException {
 	    ObjectMapper map = new ObjectMapper();
 	    ObjectWriter writer = map.writer(new DefaultPrettyPrinter());
-	    writer.writeValue(Paths.get(path).toFile(), this);
+	    writer.writeValue(Paths.get(path + "/" + name + ".json").toFile(), this);
+	}
+	
+	public boolean isTokenOnBoard(Player p) {
+		for(int i=0;i < this.onBoard.length; i++) {
+			for(int j=0; j<4;j++) {
+				if(this.onBoard[i] == (p.getId()*10 +j+1)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	public int roll() {
+	    Random random = new Random();
+	    return random.nextInt(6) + 1;
 	}
 	
 	public void loadFromFile(String path, String name) throws StreamReadException, DatabindException, IOException {
@@ -122,6 +144,18 @@ public class Score {
 				this.onBoard[tokenPos] = 0;
 				return true;
 			}
+			// kick enemy token
+			int enemyToken = this.onBoard[newPos];
+			int enemyPlayer = enemyToken/10;
+			this.onBoard[newPos] = token;
+			this.onBoard[tokenPos] = 0;
+			for(int i=0; i<4;i++) {
+				// counter i + playerNumber * 4
+				if(this.startBoard[i+enemyPlayer*4] == 0) {
+					this.startBoard[i+enemyPlayer*4] = enemyToken;
+					return true;
+				}
+			}	
 			return false;
 		}
 		// if not found, find token in goalBoard

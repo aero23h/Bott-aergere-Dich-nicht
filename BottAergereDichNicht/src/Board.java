@@ -1,5 +1,4 @@
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Random;
 
 import com.fasterxml.jackson.core.exc.StreamWriteException;
@@ -51,10 +50,6 @@ public class Board {
 									{18,10}, {16,10}, {14,10}, {12,10}};
 	}
 	
-	public int roll() {
-		return 6;
-	}
-	
 	public String token2Board(int token) {
 		int playerId = token / 10;
 		String tokenChr = Character.toString(48 + token % 10);
@@ -75,18 +70,18 @@ public class Board {
 		return result;
 	}
 	
-	public boolean hasWon(int id) {
+	public boolean hasWon(Player p) {
 		for(int i=0; i<4; i++) {
-			if(this.score.getGoalBoard()[id*4+i] == 0){
+			if(this.score.getGoalBoard()[p.getId()*4+i] == 0){
 				return false;
 			}
 		}
 		return true;
 	}
 	
-	public void plotScore2Console(ArrayList<String> menu) {
+	public void plotScore2Console() {
 		// clear console
-		this.clearConsole();
+		//this.clearConsole();
 		// startup
 		String[][] actualBoard = this.copyOf(this.emptyBoard);
 		// update start
@@ -122,9 +117,9 @@ public class Board {
 			line += this.score.getPlayers()[i].getColor()+"        Player "+ (i+1) + ": " + this.score.getPlayers()[i].getName()+color.getReset();
 		}
 		// add menu
-		if(i>4 && ((i-5) < menu.size())) {
-			line += "        " + menu.get(i-5);
-		}	
+		//if(i>4 && ((i-5) < menu.size())) {
+		//	line += "        " + menu.get(i-5);
+		//}	
 		System.out.println(line);
 		}
 		
