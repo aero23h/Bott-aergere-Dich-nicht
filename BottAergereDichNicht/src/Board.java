@@ -70,6 +70,15 @@ public class Board {
 		return result;
 	}
 	
+	public boolean hasWon(int id) {
+		for(int i=0; i<4; i++) {
+			if(this.score.getGoalBoard()[id*4+i] == 0){
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	public void plotScore2Console(ArrayList<String> menu) {
 		// clear console
 		this.clearConsole();

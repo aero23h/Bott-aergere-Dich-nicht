@@ -72,15 +72,15 @@ public class Score {
 		this.getPlayers()[id].setName(player.getName());
 	}
 	
-	public void save2File(String fileName) throws StreamWriteException, DatabindException, IOException {
+	public void save2File(String path) throws StreamWriteException, DatabindException, IOException {
 	    ObjectMapper map = new ObjectMapper();
 	    ObjectWriter writer = map.writer(new DefaultPrettyPrinter());
-	    writer.writeValue(Paths.get(fileName).toFile(), this);
+	    writer.writeValue(Paths.get(path).toFile(), this);
 	}
 	
-	public void loadFromFile(String fileName) throws StreamReadException, DatabindException, IOException {
+	public void loadFromFile(String path, String name) throws StreamReadException, DatabindException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
-	    Score loadedData = mapper.readValue(Paths.get(fileName).toFile(), Score.class);
+	    Score loadedData = mapper.readValue(Paths.get(path + "/" + name + ".json").toFile(), Score.class);
 	    this.goalBoard = loadedData.getGoalBoard();
 	    this.startBoard = loadedData.getStartBoard();
 	    this.onBoard = loadedData.getOnBoard();
