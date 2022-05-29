@@ -113,13 +113,13 @@ public class Board {
 				line += actualBoard[i][j];
 			}
 		// add player to board
-		if(i>2 && i<7) {
-			line += this.score.getPlayers()[i-3].getColor()+"        Player "+ (i-2) + ": " + this.score.getPlayers()[i-3].getName()+color.getReset();
+		if(i>-1 && i<4) {
+			line += this.score.getPlayers()[i].getColor()+"        Player "+ (i+1) + ": " + this.score.getPlayers()[i].getName()+color.getReset();
 		}
 		// add menu
-		if(i>9 && ((i-10) < menu.size())) {
-			line += "        " + menu.get(i-10);
-		}
+		if(i>4 && ((i-5) < menu.size())) {
+			line += "        " + menu.get(i-5);
+		}	
 		System.out.println(line);
 		}
 		

@@ -21,12 +21,13 @@ public class Score {
 	public Score() {
 		Color color = new Color();
 		this.players = new Player[4];
+		this.noPlayer = new Player("", color.getReset(), -1);
+		
+		// default player
 		this.players[0] = new Player("Player A", color.getBlue(), 0);
 		this.players[1] = new Player("Player B", color.getGreen(), 1);
 		this.players[2] = new Player("Player C", color.getRed(), 2);
 		this.players[3] = new Player("Player D", color.getYellow(), 3);
-		this.noPlayer = new Player("", color.getReset(), -1);
-		
 		this.init(4);
 	}
 	

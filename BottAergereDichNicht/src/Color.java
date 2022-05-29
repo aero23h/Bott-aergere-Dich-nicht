@@ -15,6 +15,23 @@ public class Color {
 		this.white = "\u001b[37m";
 		this.reset = "\u001b[0m";
 	}
+	public String getColorName(String color){
+		switch(color) {
+		// blue
+		case "\u001b[34m":
+			return this.getBlue() + "blue" + this.getReset();
+			// green
+		case "\u001b[32m":
+			return this.getGreen() + "green" + this.getReset();
+			// red
+		case "\u001b[31m":
+			return this.getRed() + "red" + this.getReset();
+			// yellow
+		case "\u001b[33m":
+			return this.getYellow() + "yellow" + this.getReset();
+		}
+		return this.reset;
+	}
 
 	public String getRed() {
 		return this.red;

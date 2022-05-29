@@ -17,6 +17,7 @@ public class Menu {
 				{" |___\\___/\\__|\\__| \\__,_|_| \\__, \\___|_| \\___| |___/|_\\__|_||_| |_||_|_\\__|_||_\\__|"},
 				{"                            |___/                                                  "},
 				};
+		
 	}
 	public ArrayList<String> emptyMenu() {	
 		ArrayList<String> list = new ArrayList<>();
@@ -41,13 +42,62 @@ public class Menu {
 		return list;
 	}
 	
-	public ArrayList<String> buildGameMenu(Player p, int[] token) {
+	public ArrayList<String> buildGameMenu(Player p, int[] token, int step) {
 		ArrayList<String> list = new ArrayList<>();
-				list.add("*** " + p.getColor() +  p.getName() + c.getReset() + " ***");
-				list.add("");
-				for(int t: token){
-					list.add("("+(t%10)+")" + " Token " + p.getColor() + (t%10) + c.getReset());
-				}
+		list.add("*** " + p.getColor() +  p.getName() + c.getReset() + " ***");
+		list.add("");
+		// add token to list
+		for(int t: token){
+			list.add("("+(t%10)+")" + " Token " + p.getColor() + (t%10) + c.getReset());
+		}
+		// add space
+		list.add("");
+		// add dice to list
+		switch(step){
+		case 1:
+			list.add("+---------+");
+			list.add("|         |");
+			list.add("|    *    |");
+			list.add("|         |");
+			list.add("+---------+");
+			break;
+		case 2:
+			list.add("+---------+");
+			list.add("| *       |");
+			list.add("|         |");
+			list.add("|       * |");
+			list.add("+---------+");
+			break;
+		case 3:
+			list.add("+---------+");
+			list.add("| *       |");
+			list.add("|    *    |");
+			list.add("|       * |");
+			list.add("+---------+");
+			break;
+		case 4:
+			list.add("+---------+");
+			list.add("| *     * |");
+			list.add("|         |");
+			list.add("| *     * |");
+			list.add("+---------+");
+			break;
+		case 5:
+			list.add("+---------+");
+			list.add("| *     * |");
+			list.add("|    *    |");
+			list.add("| *     * |");
+			list.add("+---------+");
+			break;
+		case 6:
+			list.add("+---------+");
+			list.add("| *     * |");
+			list.add("| *     * |");
+			list.add("| *     * |");
+			list.add("+---------+");
+			break;
+		}
+		
 		return list;
 	}
 	
@@ -58,6 +108,21 @@ public class Menu {
 		list.add("(l) \tLoad game ");
 		list.add("(h) \tShow highscore ");
 		list.add("(q) \tQuit ");	
+		return list;
+	}
+	
+	public ArrayList<String> buildAmountMenu(){
+		ArrayList<String> list = new ArrayList<>();
+		list.add("\t*** Select amount players *** \n");
+		list.add("\t*** 2-4 ***");
+		return list;
+	}
+	
+	public ArrayList<String> buildCustomMenu(String[] s){
+		ArrayList<String> list = new ArrayList<>();
+		for(String line: s) {
+			list.add(line);
+		}
 		return list;
 	}
 	
@@ -82,21 +147,19 @@ public class Menu {
 		}
 		list.add("");
 		list.add("(n)\tcreate new palyer");
-		list.add("(c)\tcancel");
+		list.add("(c)\tback");
 		return list;
 	}
 	
-	public ArrayList<String> buildColorMenu(Player p){
+	public ArrayList<String> buildColorMenu(Player p, String[] colorList){
 		Color c = new Color();
 		ArrayList<String> list = new ArrayList<>();
 		list.add("\t*** Select color ***");
 		list.add("\tPlayer: "+ p.getName() + "\n");
-		list.add("\t(r)\t "+ c.getRed()+  "Red" +c.getReset());
-		list.add("\t(b)\t "+ c.getBlue()+  "Blue" +c.getReset());
-		list.add("\t(g)\t "+ c.getGreen()+  "Green" +c.getReset());
-		list.add("\t(y)\t "+ c.getYellow()+  "Yellow" +c.getReset()+ "\n");
-		list.add("\t(c)\tcancel");
-		
+		for(int i=0; i<colorList.length;i++) {
+			list.add("\t("+i+") \t" + c.getColorName(colorList[i]) +c.getReset());
+		}
+		list.add("\t(c)\tback");
 		return list;
 	}
 	
@@ -120,7 +183,7 @@ public class Menu {
 			list.add("\tno saved games found!");
 		}
 		list.add("");
-		list.add("(c)\t\tcancel");
+		list.add("(c)\t\tback");
 		
 		return list;
 	}
