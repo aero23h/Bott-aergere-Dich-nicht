@@ -23,18 +23,18 @@ public class Player {
 		this.color = color;
 	}
 	
+	public Player(String name, String color, int id) {
+		this(name, color);
+		this.id = id;
+	}
+	
 	public boolean checkDirExist(String path) {
 		if(new File(path).exists()) {
 			return true;
 		}
 		return false;
 	}
-	
-	public Player(String name, String color, int id) {
-		this(name, color);
-		this.id = id;
-	}
-	
+		
 	public void save2File(String path) throws StreamWriteException, DatabindException, IOException {
 	    if(!this.checkDirExist(path)) {
 	    	new File(path).mkdirs();

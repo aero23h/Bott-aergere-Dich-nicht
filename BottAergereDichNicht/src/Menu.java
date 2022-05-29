@@ -4,19 +4,21 @@ import java.util.ArrayList;
 
 public class Menu {
 	private Color c;
-	private String line = "-----------------------------------------------------------------------------------";
-	private String[][] top = {
-			{"  ___     _   _     _  _                        ___  _    _           _    _   _   "},
-			{" | _ )___| |_| |_  (_)(_)_ _ __ _ ___ _ _ ___  |   \\(_)__| |_    _ _ (_)__| |_| |_ "},
-			{" | _ / _ |  _|  _| / _` | '_/ _` / -_| '_/ -_) | |) | / _| ' \\  | ' \\| / _| ' |  _|"},
-			{" |___\\___/\\__|\\__| \\__,_|_| \\__, \\___|_| \\___| |___/|_\\__|_||_| |_||_|_\\__|_||_\\__|"},
-			{"                            |___/                                                  "},
-			};
+	private String line;
+	private String[][] top;
 	
 	public Menu() {
 		this.c = new Color();
+		this.line = "-----------------------------------------------------------------------------------";
+		this.top = new String [][]{
+				{"  ___     _   _     _  _                        ___  _    _           _    _   _   "},
+				{" | _ )___| |_| |_  (_)(_)_ _ __ _ ___ _ _ ___  |   \\(_)__| |_    _ _ (_)__| |_| |_ "},
+				{" | _ / _ |  _|  _| / _` | '_/ _` / -_| '_/ -_) | |) | / _| ' \\  | ' \\| / _| ' |  _|"},
+				{" |___\\___/\\__|\\__| \\__,_|_| \\__, \\___|_| \\___| |___/|_\\__|_||_| |_||_|_\\__|_||_\\__|"},
+				{"                            |___/                                                  "},
+				};
 	}
-	public ArrayList<String> empty() {	
+	public ArrayList<String> emptyMenu() {	
 		ArrayList<String> list = new ArrayList<>();
 		list.add("");
 		return list;
@@ -30,21 +32,21 @@ public class Menu {
 		return list;
 	}
 	
-	public ArrayList<String> buildGameMenu(Player player) {	
+	public ArrayList<String> buildGameMenu(Player p) {	
 		ArrayList<String> list = new ArrayList<>();
-		list.add("*** " + player.getColor()  + player.getName() + c.getReset() +" ***");
+		list.add("*** " + p.getColor()  + p.getName() + c.getReset() +" ***");
 		list.add("");
 		list.add("(r) roll a dice");
 		list.add("(c) cancel game");
 		return list;
 	}
 	
-	public ArrayList<String> buildGameMenu(Player player, int[] token) {
+	public ArrayList<String> buildGameMenu(Player p, int[] token) {
 		ArrayList<String> list = new ArrayList<>();
-				list.add("*** " + player.getColor() +  player.getName() + c.getReset() + " ***");
+				list.add("*** " + p.getColor() +  p.getName() + c.getReset() + " ***");
 				list.add("");
 				for(int t: token){
-					list.add("("+(t%10)+")" + " Token " + player.getColor() + (t%10) + c.getReset());
+					list.add("("+(t%10)+")" + " Token " + p.getColor() + (t%10) + c.getReset());
 				}
 		return list;
 	}
