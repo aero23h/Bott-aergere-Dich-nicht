@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 import com.fasterxml.jackson.core.exc.StreamWriteException;
 import com.fasterxml.jackson.databind.DatabindException;
@@ -9,13 +10,21 @@ public class Game {
 	private Board board;
 	private Menu menu;
 	private boolean isRunning;
+	private int gameMode;
 	private BufferedReader br;
+	private String scorePath;
+	private String playerPath;
 	
 	public Game() throws StreamWriteException, DatabindException, IOException{
 		this.br = new BufferedReader(new InputStreamReader(System.in));
 		this.board = new Board();
 		this.menu = new Menu();
 		this.isRunning = true;
+		this.gameMode = 0;
+		this.scorePath = "./save/score";
+		this.playerPath = "./save/player";
+		
+		
 	}
 	
 	public int intInput() {
@@ -38,25 +47,7 @@ public class Game {
 	}
 	
 	public void run() throws IOException {
-		// dummy code
-
 		
-		// real code
-		while(this.isRunning) {
-			menu.plotMenu2Console(menu.buildStartMenu());
-			switch(this.stringInput()) {
-				case "s":
-					System.out.println("S");
-					break;
-				default:
-					System.out.println("wrong input!");
-					break;
-			}
-			
-			
-			this.isRunning = false;
-		}
-
 	}
-	
+		
 }

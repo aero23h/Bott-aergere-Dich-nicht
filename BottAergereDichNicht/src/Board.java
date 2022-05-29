@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 
 import com.fasterxml.jackson.core.exc.StreamWriteException;
 import com.fasterxml.jackson.databind.DatabindException;
@@ -48,6 +49,10 @@ public class Board {
 									{2,10}, {4,10}, {6,10}, {8,10},
 									{10,2}, {10,4}, {10,6}, {10,8},
 									{18,10}, {16,10}, {14,10}, {12,10}};
+	}
+	
+	public int roll() {
+		return 6;
 	}
 	
 	public String token2Board(int token) {
