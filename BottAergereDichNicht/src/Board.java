@@ -1,6 +1,4 @@
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Random;
 
 import com.fasterxml.jackson.core.exc.StreamWriteException;
 import com.fasterxml.jackson.databind.DatabindException;
@@ -31,11 +29,13 @@ public class Board {
 	private int[][] posStart;
 	private int[][] posBoard;
 	private int[][] posGoal;
+	private Player actPlayer;
 	private Color color;
 						
 	public Board() throws StreamWriteException, DatabindException, IOException {
 		this.color = new Color();
 		this.score = new Score();
+		this.actPlayer = this.score.getPlayers()[0];
 		this.posStart = new int[][] {{17,17}, {18,17}, {17,18}, {18,18},
 									{2,17}, {2,18}, {3,17}, {3,18},
 									{2,2}, {2,3}, {3,2}, {3,3},
@@ -61,6 +61,12 @@ public class Board {
 		return color.getReset() + "( )";
 	}
 	
+	public void nextPlayer() {
+		do {
+			this.setActPlayer(this.getScore().getPlayers()[(this.getActPlayer().getId() +1) % 4]);
+		} while(this.getActPlayer().getId()<0);
+	}
+	
 	public String[][] copyOf(String[][] sourceArray){
 		String[][] result = new String[sourceArray.length][sourceArray[0].length];
 		for(int line=0; line<sourceArray.length; line++) {
@@ -71,7 +77,7 @@ public class Board {
 		return result;
 	}
 	
-	public boolean hasWon(Player p) {
+	public boolean didWin(Player p) {
 		for(int i=0; i<4; i++) {
 			if(this.score.getGoalBoard()[p.getId()*4+i] == 0){
 				return false;
@@ -81,6 +87,8 @@ public class Board {
 	}
 	
 	public void plotScore2Console() {
+		// clear console
+		this.clearConsole();
 		// startup
 		String[][] actualBoard = this.copyOf(this.emptyBoard);
 		// update start
@@ -140,6 +148,14 @@ public class Board {
 
 	public String[][] getEmptyBoard() {
 		return emptyBoard;
+	}
+
+	public Player getActPlayer() {
+		return actPlayer;
+	}
+
+	public void setActPlayer(Player actPlayer) {
+		this.actPlayer = actPlayer;
 	}
 
 }

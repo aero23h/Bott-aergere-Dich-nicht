@@ -1,69 +1,118 @@
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-
-import com.fasterxml.jackson.core.exc.StreamWriteException;
-import com.fasterxml.jackson.databind.DatabindException;
 
 public class Game {
 	private Board board;
 	private Menu menu;
-	private boolean isRunning;
-	private BufferedReader br;
 	private String scorePath;
 	private String playerPath;
-	private int gameMode;
-
 	
-	public Game() throws StreamWriteException, DatabindException, IOException{
-		this.br = new BufferedReader(new InputStreamReader(System.in));
+	public Game() throws IOException{
 		this.board = new Board();
 		this.menu = new Menu();
-		this.isRunning = true;
-		this.gameMode = 0;
 		this.scorePath = "./save/score";
 		this.playerPath = "./save/player";
-		
-		
 	}
 	
-	public int intInput() {
-		try {
-			return Integer.parseInt(this.br.readLine());
-		} catch (NumberFormatException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return 0;
-	}
-	public String stringInput() {
-		try {
-			return br.readLine();
-		} catch (NumberFormatException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return "";
-	}
-	
-	public void run() throws IOException {	
-		while(this.isRunning) {
-			for(Player p: this.board.getScore().getPlayers()) {
-				int steps = this.board.getScore().roll();
-				this.board.plotScore2Console();
-				System.out.println("Gewürfelt wurde eine: " + steps);
-				System.out.println(p.getColor() + p.getName() + " Ist am zuge" + new Color().getReset());
-				int token = this.intInput() + p.getId()*10;
-				this.board.getScore().move(token, steps);
-				if(this.board.hasWon(p)) {
-					this.isRunning = false;
-					System.out.println("Gewonnen!");
-					break;
-				}
+	public void run(){
+		int result;
+		do {
+			result = this.menu.selectMenu(this.menu.getMainMenu());
+			switch(result) {
+			// new
+			case 0:
+				this.newGame();
+				break;
+			// resume
+			case 1:
+				this.resume();
+				break;
+			// save
+			case 2:
+				this.saveCurrentGame();
+				break;
+			// load
+			case 3:
+				this.loadExistingGame();
+				break;
+			// quit
+			case 99:
+				this.quit();
+				break;
+			default:
+				System.err.println("Invalid key!");
+				break;
 			}
-		}
-		
+			
+		} while(result != 99);
 	}
-		
+	
+	
+	public void newGame() {
+		// select number of players and select players
+		//@
+		// init a new board with players
+		this.board.getScore().init(2);
+		// start playing
+		this.resume();
+	}
+	
+	public void resume() {
+		this.playGame();
+	}
+	
+	public void playGame() {
+		// while player did not win
+		boolean quit = false;
+		int result;
+		do {
+			// plot board
+			this.board.plotScore2Console();
+			// print player functions
+			System.out.println(this.board.getActPlayer().getColor() + "Actual player is: "+ this.board.getActPlayer().getName());
+			result = this.menu.selectMenu(this.menu.getPlayerMenu());
+			switch(result) {
+			// roll
+			case 0:
+				// play
+				int roll = this.board.getScore().roll();
+				int tokenNumber = -1;
+				int token = 0;
+				do {
+					System.out.print("Your roll is: "+ roll + ". Which token do you want to move or (p)ass?");
+					tokenNumber = this.menu.inputNumber(4, true);
+					// pass
+					if(tokenNumber == 64) {
+						token = 0;
+					// move token
+					} else {
+						token = tokenNumber + (this.board.getActPlayer().getId()*10);
+					}
+				// while move was successful
+				} while(!this.board.getScore().move(token, roll));
+				System.out.print(new Color().getReset());
+				this.board.nextPlayer();
+				break;
+			// back to menu
+			case 99:
+				quit = true;
+				break;
+			}
+		} while(!quit & !this.board.didWin(this.board.getActPlayer()));
+		// do sth player win
+		//@
+	}
+	
+	public void saveCurrentGame() {
+		System.out.println("save");
+		System.out.println(this.scorePath);
+		System.out.println(this.playerPath);
+	}
+	public void loadExistingGame() {
+		System.out.println("load");
+		System.out.println(this.scorePath);
+		System.out.println(this.playerPath);
+	}
+	public void quit() {
+		System.out.println("quit");
+	}	
 }

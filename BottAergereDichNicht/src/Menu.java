@@ -1,13 +1,29 @@
 
-import java.io.File;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class Menu {
 	private Color c;
 	private String line;
 	private String[][] top;
+	private ArrayList<menuItem> mainMenu;
+	private ArrayList<menuItem> playerMenu;
+	private BufferedReader keyReader;
 	
 	public Menu() {
+		this.mainMenu = new ArrayList<>();
+		this.mainMenu.add(new menuItem("(n)ew", 'n' , 0 ));
+		this.mainMenu.add(new menuItem("(r)esume", 'r' , 1 ));
+		this.mainMenu.add(new menuItem("(s)ave current game", 's' , 2 ));
+		this.mainMenu.add(new menuItem("(l)oad existing game", 'l' , 3 ));
+		this.mainMenu.add(new menuItem("(q)uit", 'q' , 99 ));
+		this.playerMenu = new ArrayList<>();
+		this.playerMenu.add(new menuItem("(r)ole the dice", 'r', 0));
+		this.playerMenu.add(new menuItem("(b)ack to menu", 'b', 99));
+		
+		this.keyReader = new BufferedReader(new InputStreamReader(System.in));
 		this.c = new Color();
 		this.line = "-----------------------------------------------------------------------------------";
 		this.top = new String [][]{
@@ -19,7 +35,62 @@ public class Menu {
 				};
 		
 	}
-	public ArrayList<String> emptyMenu() {	
+	
+	public char inputKey() {
+		int result = 0;
+		try {
+			System.out.print("Please select key: ");
+			result = keyReader.read();
+			int dummy = -1;
+			do {
+				dummy = keyReader.read();
+			} while(dummy  != 10);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return (char) result;
+	}
+	
+	public int inputNumber(int max, boolean pass) {
+		int result = -1;
+		do {
+			try {
+				result = keyReader.read() - 48; // 48 is ascii 0 transfer acii to int
+				int dummy = -1;
+				do {
+					dummy = keyReader.read();
+				} while(dummy  != 10);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}		
+		} while(((result<1) || (result>max)) && !((result == 64) && pass));
+		return result;
+	}
+	
+	public int selectMenu(ArrayList<menuItem> menuItems) {
+		// build menuLine and print it
+		String menuLine = "";
+		for(int i=0; i<menuItems.size();i++) {
+			menuLine += menuItems.get(i).getText() + " | ";
+			//@ make it pretty
+		}
+		System.out.println(menuLine);
+		// read key from keyboard
+		char key = this.inputKey();
+		for(int i=0; i<menuItems.size();i++) {
+			if(key == menuItems.get(i).getKey()) {
+				return menuItems.get(i).getResult();
+			}
+		}
+		// wrong key selected
+		return -1;
+	}
+	
+	// old code
+	
+	/*public ArrayList<String> emptyMenu() {	
 		ArrayList<String> list = new ArrayList<>();
 		list.add("");
 		return list;
@@ -205,5 +276,21 @@ public class Menu {
 			System.out.println("\t\t\t" + menu.get(i));
 		}
 		System.out.println(this.line);
+	}*/
+
+	public ArrayList<menuItem> getMainMenu() {
+		return mainMenu;
+	}
+
+	public void setMainMenu(ArrayList<menuItem> mainMenu) {
+		this.mainMenu = mainMenu;
+	}
+
+	public ArrayList<menuItem> getPlayerMenu() {
+		return playerMenu;
+	}
+
+	public void setPlayerMenu(ArrayList<menuItem> playerMenu) {
+		this.playerMenu = playerMenu;
 	}
 }

@@ -46,10 +46,13 @@ public class Score {
 				this.players[id] = this.getNoPlayer();
 			}
 		}
+		// initialize empty board arrays
 		this.goalBoard = new int[16];
 		this.onBoard = new int[40];
 		
 	}
+	
+	//@ copy of score method
 	
 	public void setPlayerByColor(Player player) {
 		int id = -1;
@@ -85,22 +88,6 @@ public class Score {
 	    writer.writeValue(Paths.get(path + "/" + name + ".json").toFile(), this);
 	}
 	
-	public boolean isTokenOnBoard(Player p) {
-		for(int i=0;i < this.onBoard.length; i++) {
-			for(int j=0; j<4;j++) {
-				if(this.onBoard[i] == (p.getId()*10 +j+1)) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-	
-	public int roll() {
-	    Random random = new Random();
-	    return random.nextInt(6) + 1;
-	}
-	
 	public void loadFromFile(String path, String name) throws StreamReadException, DatabindException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
 	    Score loadedData = mapper.readValue(Paths.get(path + "/" + name + ".json").toFile(), Score.class);
@@ -111,7 +98,28 @@ public class Score {
 	    this.noPlayer = loadedData.getNoPlayer();
 	}
 	
-	public boolean move(int token, int steps) {
+	public int roll() {
+	    Random random = new Random(System.currentTimeMillis());
+	    return random.nextInt(6) + 1;
+	}
+	
+	public boolean tokenToBoard(int removeIndex, int token) {
+		// token AB -A playerID
+		int playerID = (token / 10);
+		// check if token can put to board
+		if(this.onBoard[playerID*10] == 0) {
+			this.startBoard[removeIndex] = 0;
+			this.onBoard[(playerID*10+32) % 40] = token;
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean move(int token, int steps) { //@ check moves
+		// pass move
+		if(token == 0) {
+			return true;
+		}
 		// return true everything OK, false = something wrong
 		// find token in onBoard
 		int tokenPos = -1;
@@ -192,18 +200,6 @@ public class Score {
 					return false;
 				}
 			}
-		}
-		return false;
-	}
-	
-	public boolean tokenToBoard(int removeIndex, int token) {
-		// token AB -A playerID
-		int playerID = (token / 10);
-		// check if token can put to board
-		if(this.onBoard[playerID*10] == 0) {
-			this.startBoard[removeIndex] = 0;
-			this.onBoard[(playerID*10+32) % 40] = token;
-			return true;
 		}
 		return false;
 	}
