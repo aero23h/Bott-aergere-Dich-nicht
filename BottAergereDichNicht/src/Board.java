@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
 
 import com.fasterxml.jackson.core.exc.StreamWriteException;
@@ -80,8 +81,6 @@ public class Board {
 	}
 	
 	public void plotScore2Console() {
-		// clear console
-		//this.clearConsole();
 		// startup
 		String[][] actualBoard = this.copyOf(this.emptyBoard);
 		// update start

@@ -10,10 +10,11 @@ public class Game {
 	private Board board;
 	private Menu menu;
 	private boolean isRunning;
-	private int gameMode;
 	private BufferedReader br;
 	private String scorePath;
 	private String playerPath;
+	private int gameMode;
+
 	
 	public Game() throws StreamWriteException, DatabindException, IOException{
 		this.br = new BufferedReader(new InputStreamReader(System.in));

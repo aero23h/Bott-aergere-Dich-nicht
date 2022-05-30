@@ -148,7 +148,7 @@ public class Score {
 			int enemyToken = this.onBoard[newPos];
 			int enemyPlayer = enemyToken/10;
 			// don not kick your own token
-			if((playerID) == (enemyPlayer/10)) {
+			if((playerID) == (enemyPlayer)) {
 				return false;
 			}
 			this.onBoard[newPos] = token;
