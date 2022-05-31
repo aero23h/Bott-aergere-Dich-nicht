@@ -51,20 +51,19 @@ public class Board {
 									{18,10}, {16,10}, {14,10}, {12,10}};
 	}
 	
-	public String token2Board(int token) {
-		int playerId = token / 10;
-		String tokenChr = Character.toString(48 + token % 10);
-		return this.score.getPlayers()[playerId].getColor() + "("+tokenChr+")" + color.getReset();
-	}
-	
-	public String clearTokenFromBoard() {
-		return color.getReset() + "( )";
-	}
-	
 	public void nextPlayer() {
 		do {
 			this.setActPlayer(this.getScore().getPlayers()[(this.getActPlayer().getId() +1) % 4]);
 		} while(this.getActPlayer().getId()<0);
+	}
+	
+	public boolean didWin(Player p) {
+		for(int i=0; i<4; i++) {
+			if(this.score.getGoalBoard()[p.getId()*4+i] == 0){
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	public String[][] copyOf(String[][] sourceArray){
@@ -77,13 +76,10 @@ public class Board {
 		return result;
 	}
 	
-	public boolean didWin(Player p) {
-		for(int i=0; i<4; i++) {
-			if(this.score.getGoalBoard()[p.getId()*4+i] == 0){
-				return false;
-			}
-		}
-		return true;
+	public String token2Board(int token) {
+		int playerId = token / 10;
+		String tokenChr = Character.toString(48 + token % 10);
+		return this.score.getPlayers()[playerId].getColor() + "("+tokenChr+")" + color.getReset();
 	}
 	
 	public void plotScore2Console() {
