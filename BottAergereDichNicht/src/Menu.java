@@ -56,6 +56,9 @@ public class Menu {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			if(!tokens.contains(result)) {
+				System.err.println("Invalid key!");
+			}
 		} while(!tokens.contains(result));
 		return result;
 	}

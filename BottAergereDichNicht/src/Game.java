@@ -70,7 +70,7 @@ public class Game {
 		for(int tokenNumber=1; tokenNumber<5;tokenNumber++) {
 			token = tokenNumber + (p.getId()*10);
 			if(this.board.getScore().checkMove(token, steps)){
-				tokenList.add(token);
+				tokenList.add(tokenNumber);
 				}
 		}
 		return tokenList;
@@ -98,9 +98,8 @@ public class Game {
 					// @ plot board with token and dice
 					// check if a token is move able
 					if(tokenList.size() > 0) {
-						System.out.println(tokenList.toString());
+						System.out.println("Only token: " + tokenList.toString() + "available");
 						tokenNumber = this.menu.inputNumber(tokenList);
-						System.out.println(tokenNumber + " input");
 					} else {
 						tokenNumber = 64;
 						System.out.print("Your roll was: "+ roll + ". You got skipped.");
@@ -112,7 +111,7 @@ public class Game {
 					} else {
 						token = tokenNumber + (this.board.getActPlayer().getId()*10);
 					}
-				// while move was successful
+				// while !move was successful
 				System.out.println(tokenNumber + " input");
 				} while(!this.board.getScore().move(token, roll));
 				
@@ -141,5 +140,21 @@ public class Game {
 	}
 	public void quit() {
 		System.out.println("quit");
+	}
+
+	public Board getBoard() {
+		return board;
+	}
+
+	public void setBoard(Board board) {
+		this.board = board;
+	}
+
+	public Menu getMenu() {
+		return menu;
+	}
+
+	public void setMenu(Menu menu) {
+		this.menu = menu;
 	}	
 }

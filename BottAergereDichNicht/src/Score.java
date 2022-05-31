@@ -53,8 +53,6 @@ public class Score {
 		
 	}
 	
-	//@ copy of score method
-	
 	public void setPlayerByColor(Player player) {
 		int id = -1;
 		switch(player.getColor()) {
@@ -133,22 +131,27 @@ public class Score {
 				break;
 			}
 		}
-		// find token in onBoard
-		for(int i=0;i < this.onBoard.length; i++) {
-			if(this.onBoard[i] == token) {
-				pos = 1;
-				tokenPos = i;
-				break;
+		if(pos == -1) {
+			// find token in onBoard
+			for(int i=0;i < this.onBoard.length; i++) {
+				if(this.onBoard[i] == token) {
+					pos = 1;
+					tokenPos = i;
+					break;
+				}
 			}
 		}
-		// find token in goalBoard
-		for(int i=0;i < this.goalBoard.length; i++) {
-			if(this.goalBoard[i] == token) {
-				pos = 2;
-				tokenPos = i;
-				break;
+		if(pos == -1) {
+			// find token in goalBoard
+			for(int i=0;i < this.goalBoard.length; i++) {
+				if(this.goalBoard[i] == token) {
+					pos = 2;
+					tokenPos = i;
+					break;
+				}
 			}
 		}
+		
 		switch(pos) {
 		// startBoard
 		case 0:
@@ -201,93 +204,115 @@ public class Score {
 		return false;
 	}
 	
-	public boolean move(int token, int steps) { //@ check moves
+	public boolean move(int token, int steps) {
 		// pass move
 		if(token == 0) {
 			return true;
 		}
-		// return true everything OK, false = something wrong
-		// find token in onBoard
+		// init values
+		int pos = -1;
 		int tokenPos = -1;
 		int playerID = token/10;
-		for(int i=0;i < this.onBoard.length; i++) {
-			if(this.onBoard[i] == token) {
+		
+		// find token in onStartBoard
+		for(int i=0;i < this.startBoard.length; i++) {
+			if(this.startBoard[i] == token) {
+				pos = 0;
 				tokenPos = i;
 				break;
 			}
 		}
-		if(tokenPos > -1) {
-			// move token x steps
-			int newPos = (tokenPos + steps) % 40;
-			int boardSteps = (tokenPos + 40 - ((playerID*10+32) % 40)) % 40;
-			int goalPos = (newPos + 40 - ((playerID*10+32) % 40)) % 40;
-			// if token moved more than 40 --> into goalBoard
-			if(boardSteps > goalPos) {
-				if(this.goalBoard[(goalPos + (playerID+3)*4) % 16] == 0) {
-					this.goalBoard[(goalPos + (playerID+3)*4) % 16] = token;
-					this.onBoard[tokenPos] = 0;
-					return true;
+		if(pos == -1) {
+			// find token in onBoard
+			for(int i=0;i < this.onBoard.length; i++) {
+				if(this.onBoard[i] == token) {
+					pos = 1;
+					tokenPos = i;
+					break;
 				}
 			}
-
-			// check if newPos is empty
+		}
+		if(pos == -1) {
+			// find token in goalBoard
+			for(int i=0;i < this.goalBoard.length; i++) {
+				if(this.goalBoard[i] == token) {
+					pos = 2;
+					tokenPos = i;
+					break;
+				}
+			}
+		}
+		
+		switch(pos) {
+		// startBoard
+		case 0:
+			if(steps == 6) {
+				// calculate joinOnBoard position
+				int joinOnBoard = playerID*10;
+				// check joinOnBoard position is 0
+				if(this.onBoard[joinOnBoard] == 0) {
+					this.onBoard[joinOnBoard] = token;
+					this.startBoard[tokenPos] = 0;
+					return true;
+				}
+				
+			}
+			break;
+		// onBoard
+		case 1:
+			// move token x steps
+			int newPos = (tokenPos + steps) % 40;
+			int boardSteps = (tokenPos + 40 - ((playerID*10) % 40)) % 40;
+			int goalPos = (newPos + 40 - ((playerID*10) % 40)) % 40;
+			// check if token move more than 40
+			if(boardSteps > goalPos) {
+				// check if run over goal length
+				if((goalPos + (playerID*4)%16)<=(playerID*4+3%16)) {
+					// check if tokenPos on goalBoard is blocked		
+					if(this.goalBoard[(goalPos + (playerID)*4) % 16] == 0) {
+						// is not blocked
+						this.onBoard[tokenPos] = 0;
+						this.goalBoard[(goalPos + (playerID)*4) % 16] = token;
+						return true;
+					}
+				}
+				// overshoot goalBoard or blocked
+				return false;
+			}
+			// check if newPos is blocked
 			if(this.onBoard[newPos] == 0) {
-				// set token to newPos
 				this.onBoard[newPos] = token;
-				// remove token from oldPos
 				this.onBoard[tokenPos] = 0;
 				return true;
 			}
-			// kick enemy token
+			// position is blocked --> kick?
 			int enemyToken = this.onBoard[newPos];
 			int enemyPlayer = enemyToken/10;
 			// do not kick your own token
 			if((playerID) == (enemyPlayer)) {
 				return false;
 			}
-			this.onBoard[newPos] = token;
-			this.onBoard[tokenPos] = 0;
-			for(int i=0; i<4;i++) {
-				// counter i + playerNumber * 4
-				if(this.startBoard[i+enemyPlayer*4] == 0) {
-					return true;
-				}
-			}	
-			return false;
-		}
-		// if not found, find token in goalBoard
-		for(int i=0;i < this.goalBoard.length; i++) {
-			if(this.goalBoard[i] == token) {
-				tokenPos = i;
-				break;
+			// kick token and swap place
+			if(this.startBoard[(enemyPlayer*4)%16] == 0) {
+				this.startBoard[(enemyPlayer*4)%16] = enemyToken;
+				this.onBoard[newPos] = token;
+				this.onBoard[tokenPos] = 0;
+				return true;
 			}
-		}
-		if(tokenPos > -1) {
+
+			break;
+		// goalBoard
+		case 2:
 			// move token in goalBoard
 			int newGoalPos = tokenPos + steps;
 			// check if move is possible
-			if(newGoalPos > (playerID*4+15)%16) {
-				return false;
+			if(newGoalPos <= (playerID*4+3)%16) {
+				this.goalBoard[tokenPos] = 0;
+				this.goalBoard[newGoalPos] = token;
+				return true;
 			}
-			this.goalBoard[tokenPos] = 0;
-			this.goalBoard[newGoalPos] = token;
-			return true;
+			break;
 		}
-		// draw start token
-		if(steps == 6) {
-			for(int i=0; i<4;i++) {
-				// counter i + playerNumber * 4
-				if(this.startBoard[i+playerID*4] == token) {
-					// draw token to start
-					if(this.tokenToBoard(i+playerID*4, token)) {
-						this.startBoard[i+playerID*4] = 0;
-						return true;
-					}
-					return false;
-				}
-			}
-		}
-		// token not on board
 		return false;
 	}
 
