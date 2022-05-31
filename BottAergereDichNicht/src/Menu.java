@@ -47,6 +47,7 @@ public class Menu {
 		int result = -1;
 		do {
 			try {
+				System.out.print("Please select number: ");
 				result = keyReader.read() - 48; // 48 is ascii 0 transfer acii to int
 				int dummy = -1;
 				do {
@@ -111,15 +112,69 @@ public class Menu {
 		playerMenu.add(new menuItem("back to menu", 'b', 99));
 		return playerMenu;
 	}
-	/*public ArrayList<menuItem> tokenMenu(ArrayList){
+	
+	public ArrayList<menuItem> tokenMenu(ArrayList<Integer> tokens, int roll, Player p){
 		ArrayList<menuItem> tokenMenu = new ArrayList<>();
-		// check token
-		// @
-		// available token add to list
-		
-		// return list
+		tokenMenu.add(new menuItem("*** " + p.getColor() + p.getName() + c.getReset() + " ***", '@', -1));
+		for(int token: tokens) {
+			tokenMenu.add(new menuItem("Token: " + token, Character.forDigit(token, 10), -1));
+		}
+		tokenMenu.add(new menuItem("", '@', -1));
+		ArrayList<String> dice = this.getDice(roll);
+		for(String diceString: dice) {
+			tokenMenu.add(new menuItem(diceString, '@', -1));
+		}
 		return tokenMenu;
-	}*/
+	}
+	
+	public ArrayList<String> getDice(int roll){
+		ArrayList<String> list = new ArrayList<>();
+		switch(roll){
+		case 1:
+			list.add("+---------+");
+			list.add("|         |");
+			list.add("|    *    |");
+			list.add("|         |");
+			list.add("+---------+");
+			break;
+		case 2:
+			list.add("+---------+");
+			list.add("| *       |");
+			list.add("|         |");
+			list.add("|       * |");
+			list.add("+---------+");
+			break;
+		case 3:
+			list.add("+---------+");
+			list.add("| *       |");
+			list.add("|    *    |");
+			list.add("|       * |");
+			list.add("+---------+");
+			break;
+		case 4:
+			list.add("+---------+");
+			list.add("| *     * |");
+			list.add("|         |");
+			list.add("| *     * |");
+			list.add("+---------+");
+			break;
+		case 5:
+			list.add("+---------+");
+			list.add("| *     * |");
+			list.add("|    *    |");
+			list.add("| *     * |");
+			list.add("+---------+");
+			break;
+		case 6:
+			list.add("+---------+");
+			list.add("| *     * |");
+			list.add("| *     * |");
+			list.add("| *     * |");
+			list.add("+---------+");
+			break;
+		}
+		return list;
+	}
 	
 	
 	// old code

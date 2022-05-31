@@ -98,7 +98,8 @@ public class Game {
 					// @ plot board with token and dice
 					// check if a token is move able
 					if(tokenList.size() > 0) {
-						System.out.println("Only token: " + tokenList.toString() + "available");
+						this.board.plotScore2Console(this.menu.tokenMenu(tokenList, roll, this.board.getActPlayer()));
+						//System.out.println("Only token: " + tokenList.toString() + "available");
 						tokenNumber = this.menu.inputNumber(tokenList);
 					} else {
 						tokenNumber = 64;
