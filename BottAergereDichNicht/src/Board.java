@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.ArrayList;
 
 import com.fasterxml.jackson.core.exc.StreamWriteException;
 import com.fasterxml.jackson.databind.DatabindException;
@@ -57,12 +58,14 @@ public class Board {
 		} while(this.getActPlayer().getId()<0);
 	}
 	
-	public boolean didWin(Player p) {
+	public boolean didWin() {
 		for(int i=0; i<4; i++) {
-			if(this.score.getGoalBoard()[p.getId()*4+i] == 0){
+			if(this.score.getGoalBoard()[this.getActPlayer().getId()*4+i] == 0){
+				// player did not win
 				return false;
 			}
 		}
+		// player win
 		return true;
 	}
 	
@@ -82,7 +85,7 @@ public class Board {
 		return this.score.getPlayers()[playerId].getColor() + "("+tokenChr+")" + color.getReset();
 	}
 	
-	public void plotScore2Console() {
+	public void plotScore2Console(ArrayList<menuItem> menu) {
 		// clear console
 		this.clearConsole();
 		// startup
@@ -117,12 +120,19 @@ public class Board {
 			}
 		// add player to board
 		if(i>-1 && i<4) {
-			line += this.score.getPlayers()[i].getColor()+"        Player "+ (i+1) + ": " + this.score.getPlayers()[i].getName()+color.getReset();
+			line += this.score.getPlayers()[i].getColor()+"\t\tPlayer "+ (i+1) + ": " + this.score.getPlayers()[i].getName()+color.getReset();
 		}
 		// add menu
-		//if(i>4 && ((i-5) < menu.size())) {
-		//	line += "        " + menu.get(i-5);
-		//}	
+		if(i>4 && ((i-5) < menu.size())) {
+			char key = menu.get(i-5).getKey();
+			String text = menu.get(i-5).getText();
+			if(key != '@') {
+				line += "\t\t" + "("+ key +")  " +  text;
+			} else {
+				line += "\t\t "+ text;
+			}
+
+		}	
 		System.out.println(line);
 		}
 		

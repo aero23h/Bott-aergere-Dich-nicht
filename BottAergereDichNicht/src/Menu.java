@@ -3,25 +3,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class Menu {
 	private Color c;
 	private String line;
 	private String[][] top;
-	private ArrayList<menuItem> mainMenu;
-	private ArrayList<menuItem> playerMenu;
 	private BufferedReader keyReader;
 	
 	public Menu() {
-		this.mainMenu = new ArrayList<>();
-		this.mainMenu.add(new menuItem("(n)ew", 'n' , 0 ));
-		this.mainMenu.add(new menuItem("(r)esume", 'r' , 1 ));
-		this.mainMenu.add(new menuItem("(s)ave current game", 's' , 2 ));
-		this.mainMenu.add(new menuItem("(l)oad existing game", 'l' , 3 ));
-		this.mainMenu.add(new menuItem("(q)uit", 'q' , 99 ));
-		this.playerMenu = new ArrayList<>();
-		this.playerMenu.add(new menuItem("(r)ole the dice", 'r', 0));
-		this.playerMenu.add(new menuItem("(b)ack to menu", 'b', 99));
 		
 		this.keyReader = new BufferedReader(new InputStreamReader(System.in));
 		this.c = new Color();
@@ -41,6 +31,7 @@ public class Menu {
 		try {
 			System.out.print("Please select key: ");
 			result = keyReader.read();
+			// remove overflow
 			int dummy = -1;
 			do {
 				dummy = keyReader.read();
@@ -52,7 +43,7 @@ public class Menu {
 		return (char) result;
 	}
 	
-	public int inputNumber(int max, boolean pass) {
+	public int inputNumber(ArrayList<Integer> tokens) {
 		int result = -1;
 		do {
 			try {
@@ -64,19 +55,23 @@ public class Menu {
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}		
-		} while(((result<1) || (result>max)) && !((result == 64) && pass));
+			}
+		} while(!tokens.contains(result));
 		return result;
 	}
 	
-	public int selectMenu(ArrayList<menuItem> menuItems) {
-		// build menuLine and print it
-		String menuLine = "";
-		for(int i=0; i<menuItems.size();i++) {
-			menuLine += menuItems.get(i).getText() + " | ";
-			//@ make it pretty
+	public int selectMenu(ArrayList<menuItem> menuItems, String header) {
+		// if list is shown on console
+		if(header != "") {
+			// print menuHeader
+			System.out.println("\t\t\t *** " + header + " ***" );
+			// build menuLine and print it
+			String menuLine = "";
+			for(int i=0; i<menuItems.size();i++) {
+				menuLine += "\t\t\t" + "("+ menuItems.get(i).getKey() +")  " +  menuItems.get(i).getText() + "\n";
+			}
+			System.out.println(menuLine);
 		}
-		System.out.println(menuLine);
 		// read key from keyboard
 		char key = this.inputKey();
 		for(int i=0; i<menuItems.size();i++) {
@@ -87,6 +82,42 @@ public class Menu {
 		// wrong key selected
 		return -1;
 	}
+	
+	public void plotHeader() {
+		System.out.println(this.line);
+		for(int i=0; i<this.top.length; i++){
+			System.out.println(this.top[i][0]);
+			}
+		System.out.println(this.line);
+	}
+	
+	public ArrayList<menuItem> mainMenu(){
+		ArrayList<menuItem> mainMenu = new ArrayList<>();
+		mainMenu.add(new menuItem("new", 'n' , 0 ));
+		mainMenu.add(new menuItem("resume", 'r' , 1 ));
+		mainMenu.add(new menuItem("save current game", 's' , 2 ));
+		mainMenu.add(new menuItem("load existing game", 'l' , 3 ));
+		mainMenu.add(new menuItem("quit", 'q' , 99 ));
+		return mainMenu;
+	}
+	
+	public ArrayList<menuItem> playerMenu(Player p){
+		ArrayList<menuItem> playerMenu = new ArrayList<>();
+		playerMenu.add(new menuItem("*** " + p.getColor() + p.getName() + c.getReset() + " ***", '@', -1));
+		playerMenu.add(new menuItem("role the dice", 'r', 0));
+		playerMenu.add(new menuItem("back to menu", 'b', 99));
+		return playerMenu;
+	}
+	/*public ArrayList<menuItem> tokenMenu(ArrayList){
+		ArrayList<menuItem> tokenMenu = new ArrayList<>();
+		// check token
+		// @
+		// available token add to list
+		
+		// return list
+		return tokenMenu;
+	}*/
+	
 	
 	// old code
 	
@@ -277,20 +308,4 @@ public class Menu {
 		}
 		System.out.println(this.line);
 	}*/
-
-	public ArrayList<menuItem> getMainMenu() {
-		return mainMenu;
-	}
-
-	public void setMainMenu(ArrayList<menuItem> mainMenu) {
-		this.mainMenu = mainMenu;
-	}
-
-	public ArrayList<menuItem> getPlayerMenu() {
-		return playerMenu;
-	}
-
-	public void setPlayerMenu(ArrayList<menuItem> playerMenu) {
-		this.playerMenu = playerMenu;
-	}
 }

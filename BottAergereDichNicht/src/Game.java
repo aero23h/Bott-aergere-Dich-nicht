@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Game {
 	private Board board;
@@ -14,9 +15,12 @@ public class Game {
 	}
 	
 	public void run(){
+		// mainMenu
 		int result;
 		do {
-			result = this.menu.selectMenu(this.menu.getMainMenu());
+			// header
+			this.menu.plotHeader();
+			result = this.menu.selectMenu(this.menu.mainMenu(), "Main menu");
 			switch(result) {
 			// new
 			case 0:
@@ -60,16 +64,27 @@ public class Game {
 		this.playGame();
 	}
 	
+	public ArrayList<Integer> checkAvailableToken(Player p, int steps){
+		ArrayList<Integer> tokenList = new ArrayList<>();
+		int token = 0;
+		for(int tokenNumber=1; tokenNumber<5;tokenNumber++) {
+			token = tokenNumber + (p.getId()*10);
+			if(this.board.getScore().checkMove(token, steps)){
+				tokenList.add(token);
+				}
+		}
+		return tokenList;
+	}
+	
 	public void playGame() {
 		// while player did not win
 		boolean quit = false;
 		int result;
 		do {
 			// plot board
-			this.board.plotScore2Console();
+			this.board.plotScore2Console(this.menu.playerMenu(this.board.getActPlayer()));
 			// print player functions
-			System.out.println(this.board.getActPlayer().getColor() + "Actual player is: "+ this.board.getActPlayer().getName());
-			result = this.menu.selectMenu(this.menu.getPlayerMenu());
+			result = this.menu.selectMenu(this.menu.playerMenu(this.board.getActPlayer()), "");
 			switch(result) {
 			// roll
 			case 0:
@@ -77,9 +92,19 @@ public class Game {
 				int roll = this.board.getScore().roll();
 				int tokenNumber = -1;
 				int token = 0;
+				ArrayList<Integer> tokenList;
 				do {
-					System.out.print("Your roll is: "+ roll + ". Which token do you want to move or (p)ass?");
-					tokenNumber = this.menu.inputNumber(4, true);
+					tokenList = this.checkAvailableToken(this.board.getActPlayer(), roll);
+					// @ plot board with token and dice
+					// check if a token is move able
+					if(tokenList.size() > 0) {
+						System.out.println(tokenList.toString());
+						tokenNumber = this.menu.inputNumber(tokenList);
+						System.out.println(tokenNumber + " input");
+					} else {
+						tokenNumber = 64;
+						System.out.print("Your roll was: "+ roll + ". You got skipped.");
+					}
 					// pass
 					if(tokenNumber == 64) {
 						token = 0;
@@ -88,16 +113,19 @@ public class Game {
 						token = tokenNumber + (this.board.getActPlayer().getId()*10);
 					}
 				// while move was successful
+				System.out.println(tokenNumber + " input");
 				} while(!this.board.getScore().move(token, roll));
+				
 				System.out.print(new Color().getReset());
 				this.board.nextPlayer();
 				break;
 			// back to menu
 			case 99:
+				this.board.clearConsole();
 				quit = true;
 				break;
 			}
-		} while(!quit & !this.board.didWin(this.board.getActPlayer()));
+		} while(!quit & !this.board.didWin());
 		// do sth player win
 		//@
 	}
@@ -108,9 +136,8 @@ public class Game {
 		System.out.println(this.playerPath);
 	}
 	public void loadExistingGame() {
-		System.out.println("load");
-		System.out.println(this.scorePath);
-		System.out.println(this.playerPath);
+		
+
 	}
 	public void quit() {
 		System.out.println("quit");

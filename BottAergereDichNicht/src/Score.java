@@ -1,6 +1,7 @@
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Random;
 
 import com.fasterxml.jackson.core.exc.StreamReadException;
@@ -115,6 +116,91 @@ public class Score {
 		return false;
 	}
 	
+	public boolean checkMove(int token, int steps) {
+		int pos = -1;
+		int tokenPos = -1;
+		int playerID = token/10;
+		// reference tokens
+		ArrayList<Integer> playerTokens = new ArrayList<Integer>();
+		for(int i=1; i<5;i++) {
+			playerTokens.add(playerID*10+i);
+		}
+		// find token in onStartBoard
+		for(int i=0;i < this.startBoard.length; i++) {
+			if(this.startBoard[i] == token) {
+				pos = 0;
+				tokenPos = i;
+				break;
+			}
+		}
+		// find token in onBoard
+		for(int i=0;i < this.onBoard.length; i++) {
+			if(this.onBoard[i] == token) {
+				pos = 1;
+				tokenPos = i;
+				break;
+			}
+		}
+		// find token in goalBoard
+		for(int i=0;i < this.goalBoard.length; i++) {
+			if(this.goalBoard[i] == token) {
+				pos = 2;
+				tokenPos = i;
+				break;
+			}
+		}
+		switch(pos) {
+		// startBoard
+		case 0:
+			if(steps == 6) {
+				// get new position of onBoard
+				int newPos = (tokenPos + steps) % 40;
+				// check if new position is available
+				if(playerTokens.contains(this.onBoard[newPos])) {
+					return false;
+				}
+				// move to onBoard successful
+				return true;
+			}
+			break;
+		// onBoard
+		case 1:
+			// get new position of onBoard
+			int newPos = (tokenPos + steps) % 40;
+			int boardSteps = (tokenPos + 40 - ((playerID*10+32) % 40)) % 40;
+			int goalPos = (newPos + 40 - ((playerID*10+32) % 40)) % 40;
+			// if token moved more than 40 --> into goalBoard
+			if(boardSteps > goalPos) {
+				if(!playerTokens.contains(this.goalBoard[(goalPos + (playerID+3)*4) % 16])) {
+					// goalBoard position is free
+					return true;
+				}
+			}
+			if(!playerTokens.contains(this.onBoard[newPos])) {
+				return true;
+			}
+			break;
+		// goalBoard
+		case 2:
+			// get position goalBoard
+			int newGoalPos = tokenPos + steps;
+			// check if move is possible
+			if(newGoalPos > (playerID*4+15)%16) {
+				return false;
+			}
+			if(!playerTokens.contains(this.goalBoard[newGoalPos])) {
+				// token can move in goalBoard
+				return true;
+			}
+			break;
+		// token not found
+		default:
+			System.err.println("Token not found: " + this.getClass().getName() + " checkMove(int token, int steps)");
+			break;
+		}
+		return false;
+	}
+	
 	public boolean move(int token, int steps) { //@ check moves
 		// pass move
 		if(token == 0) {
@@ -155,7 +241,7 @@ public class Score {
 			// kick enemy token
 			int enemyToken = this.onBoard[newPos];
 			int enemyPlayer = enemyToken/10;
-			// don not kick your own token
+			// do not kick your own token
 			if((playerID) == (enemyPlayer)) {
 				return false;
 			}
@@ -164,7 +250,6 @@ public class Score {
 			for(int i=0; i<4;i++) {
 				// counter i + playerNumber * 4
 				if(this.startBoard[i+enemyPlayer*4] == 0) {
-					this.startBoard[i+enemyPlayer*4] = enemyToken;
 					return true;
 				}
 			}	
@@ -195,12 +280,14 @@ public class Score {
 				if(this.startBoard[i+playerID*4] == token) {
 					// draw token to start
 					if(this.tokenToBoard(i+playerID*4, token)) {
+						this.startBoard[i+playerID*4] = 0;
 						return true;
 					}
 					return false;
 				}
 			}
 		}
+		// token not on board
 		return false;
 	}
 
