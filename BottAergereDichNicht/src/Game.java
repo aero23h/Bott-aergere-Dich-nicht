@@ -41,6 +41,10 @@ public class Game {
 			case 3:
 				this.loadExistingGame();
 				break;
+			// user
+			case 4:
+				this.editUser();
+				break;
 			// quit
 			case 99:
 				this.quit();
@@ -57,6 +61,14 @@ public class Game {
 	public void newGame() {
 		// select number of players and select players
 		//@
+		// list all available players
+			// old user from path
+			// new user
+			// edit user
+			// delete user
+			// back
+		// 
+		
 		// init a new board with players
 		this.board.getScore().init(2);
 		// start playing
@@ -76,9 +88,23 @@ public class Game {
 	
 	//load function
 	public void loadExistingGame() {
-		
-
+		// @
+		// list all available files
+		// which file to load
+		// load file by name / key
+		// resume to loaded game
+		this.resume();
 	}
+	// user menu
+	public void editUser() {
+		// @
+		// list all available users
+		// which user to load
+		// edit user by input
+		// save user
+		System.out.println("edit user");	
+	}
+	
 	// quit function
 	public void quit() {
 		System.out.println("quit");
@@ -154,6 +180,7 @@ public class Game {
 		// while no player win
 		} while(!quit & !this.board.didWin());
 		// do something when player win
+		// fancy player display who win
 		//@
 	}
 	

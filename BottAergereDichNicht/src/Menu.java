@@ -109,6 +109,7 @@ public class Menu {
 		mainMenu.add(new menuItem("resume", 'r' , 1 ));
 		mainMenu.add(new menuItem("save current game", 's' , 2 ));
 		mainMenu.add(new menuItem("load existing game", 'l' , 3 ));
+		mainMenu.add(new menuItem("edit saved users", 'u', 4));
 		mainMenu.add(new menuItem("quit", 'q' , 99 ));
 		return mainMenu;
 	}
