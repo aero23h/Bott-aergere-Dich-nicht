@@ -298,7 +298,6 @@ public class Score {
 				this.onBoard[tokenPos] = 0;
 				return true;
 			}
-
 			break;
 		// goalBoard
 		case 2:

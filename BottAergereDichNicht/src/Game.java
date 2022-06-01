@@ -154,7 +154,7 @@ public class Game {
 						System.out.print("Your rolled: "+ roll + ". No move is possible. Skipping...");
 						// delay to read the not movable text better
 						try {
-							TimeUnit.SECONDS.sleep(1);
+							TimeUnit.MILLISECONDS.sleep(500);
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
