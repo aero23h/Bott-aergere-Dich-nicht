@@ -13,9 +13,11 @@ public class Player {
 	private String name;
 	private String color;
 	private int id;
+	// addition possible
+	//private String createDate;
+	//private String timesPlayed;
 	
 	public Player() {
-		
 	}
 	
 	public Player(String name, String color) {
@@ -23,6 +25,7 @@ public class Player {
 		this.color = color;
 	}
 	
+	// Score use this constructor for creating his dummy players. id is always between 1-4 --> number of playing player
 	public Player(String name, String color, int id) {
 		this(name, color);
 		this.id = id;
@@ -51,9 +54,12 @@ public class Player {
 	    return p;
 	}
 	
-
+	// ######################################################################################################################
 	public String getName() {
 		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getColor() {
@@ -72,8 +78,6 @@ public class Player {
 		this.id = id;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
+
 
 }

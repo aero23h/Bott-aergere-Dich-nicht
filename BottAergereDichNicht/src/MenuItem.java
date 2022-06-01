@@ -1,10 +1,10 @@
 
-public class menuItem {
+public class MenuItem {
 	private String text;
 	private char key;
 	private int result;
 	
-	public menuItem(String text, char key, int result) {
+	public MenuItem(String text, char key, int result) {
 		this.text = text;
 		this.key = key;
 		this.result = result;

@@ -5,14 +5,13 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class Menu {
-	private Color c;
+	private Color color;
 	private String[][] header;
 	private BufferedReader keyReader;
 	
 	// constructor
 	public Menu() {
-		this.keyReader = new BufferedReader(new InputStreamReader(System.in));
-		this.c = new Color();
+		this.color = new Color();
 		this.header = new String [][]{
 				{"-----------------------------------------------------------------------------------"},
 				{"  ___     _   _     _  _                        ___  _    _           _    _   _   "},
@@ -22,10 +21,9 @@ public class Menu {
 				{"                            |___/                                                  "},
 				{"-----------------------------------------------------------------------------------"},
 				};
-		
+		this.keyReader = new BufferedReader(new InputStreamReader(System.in));
 	}
 	
-	// input functions
 	public char inputKey() {
 		int result = 0;
 		try {
@@ -37,7 +35,6 @@ public class Menu {
 				dummy = keyReader.read();
 			} while(dummy  != 10);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return (char) result;
@@ -54,7 +51,6 @@ public class Menu {
 					dummy = keyReader.read();
 				} while(dummy  != 10);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			if(!tokens.contains(result)) {
@@ -64,8 +60,32 @@ public class Menu {
 		return result;
 	}
 	
-	// plot menu
-	public int selectMenu(ArrayList<menuItem> menuItems, String header) {
+	public String inputString() {
+		String result = "";
+		System.out.print("Please enter String: ");
+		try {
+			result = keyReader.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	public int inputNumber() {
+		int result = -1;
+		do {
+			try {
+				System.out.print("Please enter number: ");
+				result = Integer.parseInt(keyReader.readLine());
+			} catch (Exception e) {
+				System.err.println("Input is not a usable number");
+			}
+		} while(result == -1);
+		return result;
+	}
+	
+	
+	public void plotMenu(ArrayList<MenuItem> menuItems, String header) {
 		// is header shown in console?
 		// header == "" -> no header
 		if(header != "") {
@@ -78,6 +98,12 @@ public class Menu {
 			}
 			System.out.println(menuLine);
 		}
+	}
+	
+	// plot menu
+	public int selectMenu(ArrayList<MenuItem> menuItems, String header) {
+		// plot menu
+		this.plotMenu(menuItems, header);
 		// read key from keyboard
 		char key = this.inputKey();
 		for(int i=0; i<menuItems.size();i++) {
@@ -85,9 +111,10 @@ public class Menu {
 				return menuItems.get(i).getResult();
 			}
 		}
-		// wrong key selected
+		// wrong key
 		return -1;
 	}
+
 	
 	// plot header
 	public void plotHeader() {
@@ -103,35 +130,35 @@ public class Menu {
 	// return value of -1 == no function
 	// key == '@' -> ignor the key
 	
-	public ArrayList<menuItem> mainMenu(){
-		ArrayList<menuItem> mainMenu = new ArrayList<>();
-		mainMenu.add(new menuItem("new", 'n' , 0 ));
-		mainMenu.add(new menuItem("resume", 'r' , 1 ));
-		mainMenu.add(new menuItem("save current game", 's' , 2 ));
-		mainMenu.add(new menuItem("load existing game", 'l' , 3 ));
-		mainMenu.add(new menuItem("edit saved users", 'u', 4));
-		mainMenu.add(new menuItem("quit", 'q' , 99 ));
+	public ArrayList<MenuItem> mainMenu(){
+		ArrayList<MenuItem> mainMenu = new ArrayList<>();
+		mainMenu.add(new MenuItem("new", 'n' , 0 ));
+		mainMenu.add(new MenuItem("resume", 'r' , 1 ));
+		mainMenu.add(new MenuItem("save current game", 's' , 2 ));
+		mainMenu.add(new MenuItem("load existing game", 'l' , 3 ));
+		mainMenu.add(new MenuItem("edit saved users", 'u', 4));
+		mainMenu.add(new MenuItem("quit", 'q' , 99 ));
 		return mainMenu;
 	}
 	
-	public ArrayList<menuItem> playerMenu(Player p){
-		ArrayList<menuItem> playerMenu = new ArrayList<>();
-		playerMenu.add(new menuItem("*** " + p.getColor() + p.getName() + c.getReset() + " ***", '@', -1));
-		playerMenu.add(new menuItem("role the dice", 'r', 0));
-		playerMenu.add(new menuItem("back to menu", 'b', 99));
+	public ArrayList<MenuItem> playerMenu(Player p){
+		ArrayList<MenuItem> playerMenu = new ArrayList<>();
+		playerMenu.add(new MenuItem("*** " + p.getColor() + p.getName() + color.getReset() + " ***", '@', -1));
+		playerMenu.add(new MenuItem("role the dice", 'r', 0));
+		playerMenu.add(new MenuItem("back to menu", 'b', 99));
 		return playerMenu;
 	}
 	
-	public ArrayList<menuItem> tokenMenu(ArrayList<Integer> tokens, int roll, Player p){
-		ArrayList<menuItem> tokenMenu = new ArrayList<>();
-		tokenMenu.add(new menuItem("*** " + p.getColor() + p.getName() + c.getReset() + " ***", '@', -1));
+	public ArrayList<MenuItem> tokenMenu(ArrayList<Integer> tokens, int roll, Player p){
+		ArrayList<MenuItem> tokenMenu = new ArrayList<>();
+		tokenMenu.add(new MenuItem("*** " + p.getColor() + p.getName() + color.getReset() + " ***", '@', -1));
 		for(int token: tokens) {
-			tokenMenu.add(new menuItem("Token: " + token, Character.forDigit(token, 10), -1));
+			tokenMenu.add(new MenuItem("Token: " + token, Character.forDigit(token, 10), -1));
 		}
-		tokenMenu.add(new menuItem("", '@', -1));
+		tokenMenu.add(new MenuItem("", '@', -1));
 		ArrayList<String> dice = this.getDice(roll);
 		for(String diceString: dice) {
-			tokenMenu.add(new menuItem(diceString, '@', -1));
+			tokenMenu.add(new MenuItem(diceString, '@', -1));
 		}
 		return tokenMenu;
 	}
