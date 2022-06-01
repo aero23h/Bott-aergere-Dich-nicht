@@ -254,8 +254,7 @@ public class Score {
 					this.onBoard[joinOnBoard] = token;
 					this.startBoard[tokenPos] = 0;
 					return true;
-				}
-				
+				}	
 			}
 			break;
 		// onBoard
@@ -355,5 +354,7 @@ public class Score {
 	public void setNoPlayer(Player noPlayer) {
 		this.noPlayer = noPlayer;
 	}
+
+
 
 }
