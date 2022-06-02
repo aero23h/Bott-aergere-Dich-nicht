@@ -1,4 +1,6 @@
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import com.fasterxml.jackson.core.exc.StreamWriteException;
 import com.fasterxml.jackson.databind.DatabindException;
@@ -11,13 +13,12 @@ public class Main {
 		// start the game
 		g.run();
 		
-
-		g.getBoard().getScore().move(01, 6);
-		g.getBoard().getScore().move(11, 6);
-		g.getBoard().getScore().move(11, 2);
-		g.getBoard().getScore().move(01, 10);
-		g.getBoard().getScore().move(01, 2);
-		g.getBoard().plotScore2Console(g.getMenu().playerMenu(g.getBoard().getActPlayer()));
+		
+		//ArrayList<File> l = g.getMenu().getAllFiles(g.getPlayerPath());
+	    //for(File e: l) {
+	    //	System.out.println(e.getName());
+	    //}
+	    
 	}
 
 }

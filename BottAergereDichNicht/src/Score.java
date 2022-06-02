@@ -13,7 +13,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 
 
 public class Score {
-
+	private Color color;
 	private int[] startBoard;
 	private int[] goalBoard;
 	private int[] onBoard;
@@ -21,19 +21,20 @@ public class Score {
 	private Player noPlayer;
 	
 	public Score() {
-		Color color = new Color();
+		this.color = new Color();
 		this.players = new Player[4];
 		this.noPlayer = new Player("", color.getReset(), -1);
-		
+		// default init
+		this.init(4);
+	}
+	
+	public void init(int playerCount) {
 		// default player
 		this.players[0] = new Player("Player A", color.getBlue(), 0);
 		this.players[1] = new Player("Player B", color.getGreen(), 1);
 		this.players[2] = new Player("Player C", color.getRed(), 2);
 		this.players[3] = new Player("Player D", color.getYellow(), 3);
-		this.init(4);
-	}
-	
-	public void init(int playerCount) {
+		
 		// TokenNumber AB-A is PlayerID, B is TokenNumber eg 13 - playerID B token 3
 		this.startBoard = new int[] {01,03,02,04,11,12,13,14,21,22,23,24,31,33,32,34};
 		// Init startBoard between 2-4 playerID
@@ -51,6 +52,15 @@ public class Score {
 		this.goalBoard = new int[16];
 		this.onBoard = new int[40];
 		
+	}
+	
+	public boolean isPlayerAlreadyPlaying(Player player) {
+		for(Player p: this.getPlayers()) {
+			if(p.getName() == player.getName()) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public void setPlayerByColor(Player player) {

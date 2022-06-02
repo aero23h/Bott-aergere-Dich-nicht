@@ -1,8 +1,10 @@
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class Game {
+	private Color color;
 	private Board board;
 	private Menu menu;
 	private String scorePath;
@@ -10,6 +12,7 @@ public class Game {
 	
 	// constructor 
 	public Game() throws IOException{
+		this.color = new Color();
 		this.board = new Board();
 		this.menu = new Menu();
 		this.scorePath = "./save/score";
@@ -23,7 +26,7 @@ public class Game {
 		do {
 			// header
 			this.menu.plotHeader();
-			result = this.menu.selectMenu(this.menu.mainMenu(), "Main menu");
+			result = this.menu.selectMenuByChar(this.menu.mainMenu(), "Main menu");
 			switch(result) {
 			// new
 			case 0:
@@ -60,19 +63,26 @@ public class Game {
 	
 	public void newGame() {
 		// select number of players and select players
-		//@
-		// list all available players
-			// old user from path
-			// new user
-			// edit user
-			// delete user
-			// back
-		// 
-		
-		// init a new board with players
-		this.board.getScore().init(2);
-		// start playing
-		this.resume();
+		int playerAmount = -1;
+		do {
+			this.menu.plotHeader();
+			playerAmount = this.menu.selectMenuByChar(this.menu.playerAmountMenu(), "How many player are playing?");
+			switch(playerAmount) {
+				case 2:
+				case 3:
+				case 4:
+					this.board.getScore().init(playerAmount);
+					this.resume();
+					break;
+				// back
+				case 99:
+					break;
+				default:
+					playerAmount = -1;
+					System.err.println("Invalid key!");
+					break;
+			}
+		} while(playerAmount == -1);
 	}
 	
 	public void resume() {
@@ -112,6 +122,10 @@ public class Game {
 		System.out.println("quit");
 	}
 	
+	public String playerID2Name(ArrayList<File> files, int id) {
+		return files.get(id-1).getName();
+	}
+	
 	public ArrayList<Integer> checkAvailableToken(Player p, int steps){
 		ArrayList<Integer> tokenList = new ArrayList<>();
 		int token = 0;
@@ -132,7 +146,7 @@ public class Game {
 			// plot board
 			this.board.plotScore2Console(this.menu.playerMenu(this.board.getActPlayer()));
 			// print player functions
-			result = this.menu.selectMenu(this.menu.playerMenu(this.board.getActPlayer()), "");
+			result = this.menu.getKey(this.menu.playerMenu(this.board.getActPlayer()));
 			switch(result) {
 			// roll
 			case 0:
@@ -199,5 +213,21 @@ public class Game {
 	}
 	public void setMenu(Menu menu) {
 		this.menu = menu;
-	}	
+	}
+
+	public String getScorePath() {
+		return scorePath;
+	}
+
+	public void setScorePath(String scorePath) {
+		this.scorePath = scorePath;
+	}
+	
+	public String getPlayerPath() {
+		return playerPath;
+	}
+
+	public void setPlayerPath(String playerPath) {
+		this.playerPath = playerPath;
+	}
 }

@@ -1,5 +1,7 @@
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -44,7 +46,7 @@ public class Menu {
 		int result = -1;
 		do {
 			try {
-				System.out.print("Please select number: ");
+				System.out.print("Please select token: ");
 				result = keyReader.read() - 48; // 48 is ascii 0 transfer acii to int
 				int dummy = -1;
 				do {
@@ -83,8 +85,48 @@ public class Menu {
 		} while(result == -1);
 		return result;
 	}
+
+	// plot menu return integer by number
+	public int selectMenuByNumber(ArrayList<MenuItem> menuItems, String header) {
+		this.plotMenu(menuItems, header);
+		return this.getNumber(menuItems);
+	}
 	
+	// plot menu return integer by char
+	public int selectMenuByChar(ArrayList<MenuItem> menuItems, String header) {
+		this.plotMenu(menuItems, header);
+		return this.getKey(menuItems);
+	}
 	
+	public int getNumber(ArrayList<MenuItem> menuItems) {
+		int key = this.inputNumber();
+		for(int i=0; i<menuItems.size();i++) {
+			if(key == menuItems.get(i).getIntKey()) {
+				return menuItems.get(i).getResult();
+			}
+		}
+		return -1;
+	}
+	
+	public int getKey(ArrayList<MenuItem> menuItems) {
+		// read key from keyboard
+		char key = this.inputKey();
+		for(int i=0; i<menuItems.size();i++) {
+			if(key == menuItems.get(i).getKey()) {
+				return menuItems.get(i).getResult();
+			}
+		}
+		return -1;
+	}
+	
+	// plot header
+	public void plotHeader() {
+		for(int i=0; i<this.header.length; i++){
+			System.out.println(this.header[i][0]);
+			}
+	}
+	
+	// plot menu
 	public void plotMenu(ArrayList<MenuItem> menuItems, String header) {
 		// is header shown in console?
 		// header == "" -> no header
@@ -94,33 +136,28 @@ public class Menu {
 			// build menuLine and print it
 			String menuLine = "";
 			for(int i=0; i<menuItems.size();i++) {
-				menuLine += "\t\t\t" + "("+ menuItems.get(i).getKey() +")  " +  menuItems.get(i).getText() + "\n";
+				if(menuItems.get(i).getIntKey() == -1) {
+					menuLine += "\t\t\t" + "("+ menuItems.get(i).getKey() +")  " +  menuItems.get(i).getText() + "\n";
+				} else {
+					menuLine += "\t\t\t" + "("+ menuItems.get(i).getIntKey() +")  " +  menuItems.get(i).getText() + "\n";
+				}
 			}
 			System.out.println(menuLine);
 		}
+		
 	}
 	
-	// plot menu
-	public int selectMenu(ArrayList<MenuItem> menuItems, String header) {
-		// plot menu
-		this.plotMenu(menuItems, header);
-		// read key from keyboard
-		char key = this.inputKey();
-		for(int i=0; i<menuItems.size();i++) {
-			if(key == menuItems.get(i).getKey()) {
-				return menuItems.get(i).getResult();
-			}
-		}
-		// wrong key
-		return -1;
-	}
-
-	
-	// plot header
-	public void plotHeader() {
-		for(int i=0; i<this.header.length; i++){
-			System.out.println(this.header[i][0]);
-			}
+	public ArrayList<File> getAllFiles(String path) {
+	    File folder = new File(path);
+	    File[] listOfFiles = folder.listFiles();
+	    int count = 0;
+	    ArrayList<File> files = new ArrayList<>();
+	    for(File f: listOfFiles) {
+	    	if(f.getName().endsWith(".json")) {
+	    		files.add(f);
+	    	}
+	    }
+		return files;
 	}
 	
 	// ########################################################################################
@@ -129,6 +166,48 @@ public class Menu {
 	// new menuItem("text",'key', return value in integer)
 	// return value of -1 == no function
 	// key == '@' -> ignor the key
+	
+	public ArrayList<MenuItem> colorMenu(String[] colorList){
+		ArrayList<MenuItem> colorMenu = new ArrayList<>();
+		for(int c=0; c<colorList.length; c++) {
+			if(colorList[c] != "") {
+				switch(colorList[c]) {
+				// blue
+				case "\u001b[34m":
+					colorMenu.add(new MenuItem(this.color.getColorName(colorList[c]), 'b', 1));
+					// green
+				case "\u001b[32m":
+					colorMenu.add(new MenuItem(this.color.getColorName(colorList[c]), 'g', 2));
+					// red
+				case "\u001b[31m":
+					colorMenu.add(new MenuItem(this.color.getColorName(colorList[c]), 'r', 3));
+					// yellow
+				case "\u001b[33m":
+					colorMenu.add(new MenuItem(this.color.getColorName(colorList[c]), 'y', 1));
+				}
+			}
+		}
+		return colorMenu;
+	}
+	
+	public ArrayList<MenuItem> playerList(ArrayList<File> files){
+		ArrayList<MenuItem> playerList = new ArrayList<>();
+		for(int i=1; i<files.size();i++) {
+			playerList.add(new MenuItem(files.get(i).getName().replaceAll(".json", ""), i , i ));
+		}
+		playerList.add(new MenuItem("create one", 0 , 998));
+		playerList.add(new MenuItem("back to menu", 999 , 999));
+		return playerList;
+	}
+	
+	public ArrayList<MenuItem> playerAmountMenu(){
+		ArrayList<MenuItem> playerAmountMenu = new ArrayList<>();
+		for(int i=2; i<=4;i++) {
+			playerAmountMenu.add(new MenuItem(i + " Player", Character.forDigit(i, 10) , i ));
+		}
+		playerAmountMenu.add(new MenuItem("back to menu", 'b' , 99 ));
+		return playerAmountMenu;
+	}
 	
 	public ArrayList<MenuItem> mainMenu(){
 		ArrayList<MenuItem> mainMenu = new ArrayList<>();
@@ -162,6 +241,8 @@ public class Menu {
 		}
 		return tokenMenu;
 	}
+	
+	//public ArrayList<MenuItem>
 	
 	public ArrayList<String> getDice(int roll){
 		ArrayList<String> list = new ArrayList<>();

@@ -6,6 +6,7 @@ public class Color {
 	private String yellow;
 	private String white;
 	private String reset;
+	private String[] colorList;
 	
 	public Color() {
 		this.red = "\u001b[31m";
@@ -14,6 +15,7 @@ public class Color {
 		this.yellow = "\u001b[33m";
 		this.white = "\u001b[37m";
 		this.reset = "\u001b[0m";
+		this.colorList = new String[] {this.blue, this.green, this.blue, this.yellow};
 	}
 	public String getColorName(String color){
 		switch(color) {
@@ -79,6 +81,12 @@ public class Color {
 
 	public void setReset(String reset) {
 		this.reset = reset;
+	}
+	public String[] getColorList() {
+		return colorList;
+	}
+	public void setColorList(String[] colorList) {
+		this.colorList = colorList;
 	}
 
 }

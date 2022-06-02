@@ -14,8 +14,8 @@ public class Player {
 	private String color;
 	private int id;
 	// addition possible
-	//private String createDate;
-	//private String timesPlayed;
+	//private int timesPlayed;
+	//private int wins;
 	
 	public Player() {
 	}
@@ -47,10 +47,23 @@ public class Player {
 	    writer.writeValue(Paths.get(path + "/" + this.getName() + ".json").toFile(), this);
 	}
 	
-	public Player loadFromFile(String path, String playerName) throws StreamReadException, DatabindException, IOException {
+	public Player loadFromFile(String path, String playerName){
 		ObjectMapper mapper = new ObjectMapper();
-	    Player ld = mapper.readValue(Paths.get(path + "/" + playerName + ".json").toFile(), Player.class);
-	    Player p = new Player(ld.getName(), ld.getColor(), ld.getId());
+	    Player ld = null;
+	    Player p = null;
+		try {
+			ld = mapper.readValue(Paths.get(path + "/" + playerName).toFile(), Player.class);
+		    p = new Player(ld.getName(), ld.getColor(), ld.getId());
+		} catch (StreamReadException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DatabindException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	    return p;
 	}
 	
