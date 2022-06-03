@@ -75,7 +75,7 @@ public class Board {
 	public String token2Board(int token) {
 		int playerId = token / 10;
 		String tokenChr = Character.toString(48 + token % 10);
-		return this.score.getPlayers()[playerId].getColor() + "("+tokenChr+")" + color.getReset();
+		return this.score.getPlayers()[playerId].getColor().getCode() + "("+tokenChr+")" + color.reset();
 	}
 	
 	public void plotScore2Console(ArrayList<MenuItem> menu) {
@@ -113,13 +113,13 @@ public class Board {
 			}
 		// add player to board
 		if(i>-1 && i<4) {
-			line += this.score.getPlayers()[i].getColor()+"\t\tPlayer "+ (i+1) + ": " + this.score.getPlayers()[i].getName()+color.getReset();
+			line += this.score.getPlayers()[i].getColor().getCode()+"\t\tPlayer "+ (i+1) + ": " + this.score.getPlayers()[i].getName()+color.reset();
 		}
 		// add menu
 		if(i>4 && ((i-5) < menu.size())) {
-			char key = menu.get(i-5).getKey();
+			String key = menu.get(i-5).getKey();
 			String text = menu.get(i-5).getText();
-			if(key != '@') {
+			if(key != "@") {
 				line += "\t\t" + "("+ key +")  " +  text;
 			} else {
 				line += "\t\t "+ text;

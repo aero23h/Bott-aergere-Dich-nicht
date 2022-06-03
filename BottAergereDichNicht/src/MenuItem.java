@@ -1,21 +1,12 @@
 
 public class MenuItem {
 	private String text;
-	private char key;
+	private String key;
 	private int result;
-	private int intKey;
 	
-	public MenuItem(String text, char key, int result) {
+	public MenuItem(String text, String key, int result) {
 		this.text = text;
 		this.key = key;
-		this.intKey = -1;
-		this.result = result;
-	}
-	
-	public MenuItem(String text, int intKey, int result) {
-		this.text = text;
-		this.key = Character.MIN_VALUE;
-		this.intKey = intKey;
 		this.result = result;
 	}
 
@@ -27,11 +18,11 @@ public class MenuItem {
 		this.text = text;
 	}
 
-	public char getKey() {
+	public String getKey() {
 		return key;
 	}
 
-	public void setKey(char key) {
+	public void setKey(String key) {
 		this.key = key;
 	}
 
@@ -41,14 +32,6 @@ public class MenuItem {
 
 	public void setResult(int result) {
 		this.result = result;
-	}
-
-	public int getIntKey() {
-		return intKey;
-	}
-
-	public void setIntKey(int intKey) {
-		this.intKey = intKey;
 	}
 
 }

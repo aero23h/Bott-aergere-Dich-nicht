@@ -1,92 +1,54 @@
 
 public class Color {
-	private String red;
-	private String green;
-	private String blue;
-	private String yellow;
-	private String white;
-	private String reset;
-	private String[] colorList;
+	private ColorItem red;
+	private ColorItem green;
+	private ColorItem blue;
+	private ColorItem yellow;
+	private ColorItem reset;
 	
 	public Color() {
-		this.red = "\u001b[31m";
-		this.green = "\u001b[32m";
-		this.blue = "\u001b[34m";
-		this.yellow = "\u001b[33m";
-		this.white = "\u001b[37m";
-		this.reset = "\u001b[0m";
-		this.colorList = new String[] {this.blue, this.green, this.blue, this.yellow};
+		this.red = new ColorItem("\u001b[31m", "red");
+		this.green = new ColorItem("\u001b[32m","green");
+		this.blue = new ColorItem("\u001b[34m","blue");
+		this.yellow = new ColorItem("\u001b[33m","yellow");
+		this.reset = new ColorItem("\u001b[0m","reset");
 	}
-	public String getColorName(String color){
-		switch(color) {
-		// blue
-		case "\u001b[34m":
-			return this.getBlue() + "blue" + this.getReset();
-			// green
-		case "\u001b[32m":
-			return this.getGreen() + "green" + this.getReset();
-			// red
-		case "\u001b[31m":
-			return this.getRed() + "red" + this.getReset();
-			// yellow
-		case "\u001b[33m":
-			return this.getYellow() + "yellow" + this.getReset();
-		}
-		return this.reset;
+	public String getColoredName(ColorItem color){
+		return color.getCode() + color.getName() + this.reset();
 	}
-
-	public String getRed() {
-		return this.red;
+	
+	public ColorItem getRed() {
+		return red;
 	}
-
-	public void setRed(String red) {
+	public void setRed(ColorItem red) {
 		this.red = red;
 	}
-
-	public String getGreen() {
-		return this.green;
+	public ColorItem getGreen() {
+		return green;
 	}
-
-	public void setGreen(String green) {
+	public void setGreen(ColorItem green) {
 		this.green = green;
 	}
-
-	public String getBlue() {
-		return this.blue;
+	public ColorItem getBlue() {
+		return blue;
 	}
-
-	public void setBlue(String blue) {
+	public void setBlue(ColorItem blue) {
 		this.blue = blue;
 	}
-
-	public String getYellow() {
-		return this.yellow;
+	public ColorItem getYellow() {
+		return yellow;
 	}
-
-	public void setYellow(String yellow) {
+	public void setYellow(ColorItem yellow) {
 		this.yellow = yellow;
 	}
-
-	public String getWhite() {
-		return this.white;
+	public ColorItem getReset() {
+		return reset;
 	}
-
-	public void setWhite(String white) {
-		this.white = white;
-	}
-
-	public String getReset() {
-		return this.reset;
-	}
-
-	public void setReset(String reset) {
+	public void setReset(ColorItem reset) {
 		this.reset = reset;
 	}
-	public String[] getColorList() {
-		return colorList;
+	
+	public String reset() {
+		return this.reset.getCode();
 	}
-	public void setColorList(String[] colorList) {
-		this.colorList = colorList;
-	}
-
 }

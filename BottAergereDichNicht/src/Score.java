@@ -62,34 +62,8 @@ public class Score {
 		}
 		return false;
 	}
-	
-	public void setPlayerByColor(Player player) {
-		int id = -1;
-		switch(player.getColor()) {
-			// blue
-			case "\u001b[34m":
-				id = 0;
-				break;
-				// green
-			case "\u001b[32m":
-				id = 1;
-				break;
-				// red
-			case "\u001b[31m":
-				id = 2;
-				break;
-				// yellow
-			case "\u001b[33m":
-				id = 3;
-				break;
-		}
-		this.getPlayers()[id].setName(player.getName());
-	}
-	
-	public void setPlayer(Player player, int id) {
-		this.getPlayers()[id].setName(player.getName());
-		this.getPlayers()[id].setColor(player.getColor());
-	}
+	// @
+	// setplayer
 	
 	public void save2File(String path, String name) throws StreamWriteException, DatabindException, IOException {
 	    ObjectMapper map = new ObjectMapper();

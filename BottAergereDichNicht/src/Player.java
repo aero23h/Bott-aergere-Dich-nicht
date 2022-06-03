@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 
 public class Player {
 	private String name;
-	private String color;
+	private ColorItem color;
 	private int id;
 	// addition possible
 	//private int timesPlayed;
@@ -20,13 +20,14 @@ public class Player {
 	public Player() {
 	}
 	
-	public Player(String name, String color) {
+	
+	public Player(String name, ColorItem color) {
 		this.name = name;
 		this.color = color;
 	}
 	
 	// Score use this constructor for creating his dummy players. id is always between 1-4 --> number of playing player
-	public Player(String name, String color, int id) {
+	public Player(String name, ColorItem color, int id) {
 		this(name, color);
 		this.id = id;
 	}
@@ -38,13 +39,18 @@ public class Player {
 		return false;
 	}
 		
-	public void save2File(String path) throws StreamWriteException, DatabindException, IOException {
+	public void save2File(String path) {
 	    if(!this.checkDirExist(path)) {
 	    	new File(path).mkdirs();
 	    }
 		ObjectMapper map = new ObjectMapper();
 	    ObjectWriter writer = map.writer(new DefaultPrettyPrinter());
-	    writer.writeValue(Paths.get(path + "/" + this.getName() + ".json").toFile(), this);
+	    try {
+			writer.writeValue(Paths.get(path + "/" + this.getName() + ".json").toFile(), this);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public Player loadFromFile(String path, String playerName){
@@ -52,7 +58,7 @@ public class Player {
 	    Player ld = null;
 	    Player p = null;
 		try {
-			ld = mapper.readValue(Paths.get(path + "/" + playerName).toFile(), Player.class);
+			ld = mapper.readValue(Paths.get(path + "/" + playerName + ".json").toFile(), Player.class);
 		    p = new Player(ld.getName(), ld.getColor(), ld.getId());
 		} catch (StreamReadException e) {
 			// TODO Auto-generated catch block
@@ -75,11 +81,11 @@ public class Player {
 		this.name = name;
 	}
 
-	public String getColor() {
+	public ColorItem getColor() {
 		return color;
 	}
 
-	public void setColor(String color) {
+	public void setColor(ColorItem color) {
 		this.color = color;
 	}
 
