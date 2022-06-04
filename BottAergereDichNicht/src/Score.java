@@ -1,13 +1,12 @@
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Random;
 
-import com.fasterxml.jackson.core.exc.StreamReadException;
-import com.fasterxml.jackson.core.exc.StreamWriteException;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
-import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
@@ -19,11 +18,14 @@ public class Score {
 	private int[] onBoard;
 	private Player[] players; 
 	private Player noPlayer;
+	private String createTime;
 	
 	public Score() {
 		this.color = new Color();
 		this.players = new Player[4];
 		this.noPlayer = new Player("", color.getReset(), -1);
+		this.createTime = LocalDateTime.now().withNano(0).toString().replaceAll(":", "-");
+		System.out.println(this.createTime);
 		// default init
 		this.init(4);
 	}
@@ -64,21 +66,57 @@ public class Score {
 	}
 	// @
 	// setplayer
-	
-	public void save2File(String path, String name) throws StreamWriteException, DatabindException, IOException {
+	public void save2File(String path, String name){
+	    if(!this.checkDirExist(path)) {
+	    	new File(path).mkdirs();
+	    }
 	    ObjectMapper map = new ObjectMapper();
 	    ObjectWriter writer = map.writer(new DefaultPrettyPrinter());
-	    writer.writeValue(Paths.get(path + "/" + name + ".json").toFile(), this);
+	    try {
+			writer.writeValue(Paths.get(path + "/" + name + ".json").toFile(), this);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
-	public void loadFromFile(String path, String name) throws StreamReadException, DatabindException, IOException {
+	public boolean checkDirExist(String path) {
+		if(new File(path).exists()) {
+			return true;
+		}
+		return false;
+	}
+	
+	public void loadFromFile(String path, String name){
+	    if(!this.checkDirExist(path)) {
+	    	new File(path).mkdirs();
+	    }
 		ObjectMapper mapper = new ObjectMapper();
-	    Score loadedData = mapper.readValue(Paths.get(path + "/" + name + ".json").toFile(), Score.class);
+	    Score loadedData = null;
+		try {
+			loadedData = mapper.readValue(Paths.get(path + "/" + name + ".json").toFile(), Score.class);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	    this.goalBoard = loadedData.getGoalBoard();
 	    this.startBoard = loadedData.getStartBoard();
 	    this.onBoard = loadedData.getOnBoard();
 	    this.players = loadedData.getPlayers();
 	    this.noPlayer = loadedData.getNoPlayer();
+	    this.createTime = loadedData.getCreateTime();
+	}
+	
+	public Score loadFromFileToObject(String path, String name){
+		ObjectMapper mapper = new ObjectMapper();
+	    Score loadedData = null;
+		try {
+			loadedData = mapper.readValue(Paths.get(path + "/" + name + ".json").toFile(), Score.class);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    return loadedData;
 	}
 	
 	public int roll() {
@@ -336,6 +374,14 @@ public class Score {
 
 	public void setNoPlayer(Player noPlayer) {
 		this.noPlayer = noPlayer;
+	}
+
+	public String getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
 	}
 
 

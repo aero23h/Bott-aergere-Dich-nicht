@@ -1,22 +1,20 @@
-import java.io.IOException;
-
-import com.fasterxml.jackson.core.exc.StreamWriteException;
-import com.fasterxml.jackson.databind.DatabindException;
-
 public class Main {
 
-	public static void main(String[] args) throws StreamWriteException, DatabindException, IOException, InterruptedException{
+	public static void main(String[] args){
 		// Create a game
 		Game g = new Game();
 		// start the game
 		g.run();
-		
-		
-		//ArrayList<File> l = g.getMenu().getAllFiles(g.getPlayerPath());
-	    //for(File e: l) {
-	    //	System.out.println(e.getName());
-	    //}
-	    
+
+	    // to do
+			// fix checkMoves
+			// add playerAttributes
+			// add scoreBoard
+			// add select player on new
+			// add color to board
+			// add something when player won
+			// add something while quitting
+			// add player save when saving a game
 	}
 
 }

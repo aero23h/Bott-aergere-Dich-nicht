@@ -3,7 +3,6 @@ import java.io.IOException;
 import java.nio.file.Paths;
 
 import com.fasterxml.jackson.core.exc.StreamReadException;
-import com.fasterxml.jackson.core.exc.StreamWriteException;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,7 +14,10 @@ public class Player {
 	private int id;
 	// addition possible
 	//private int timesPlayed;
+		// select player
 	//private int wins;
+	//private int timesRolled6;
+		// logic
 	
 	public Player() {
 	}

@@ -4,7 +4,6 @@ public class ColorItem {
 	private String name;
 	
 	public ColorItem() {
-		
 	}
 
 	public ColorItem(String code, String name) {

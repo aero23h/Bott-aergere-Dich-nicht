@@ -1,11 +1,8 @@
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
-import java.nio.file.Files;
 import java.util.ArrayList;
 
 public class Menu {
@@ -17,13 +14,13 @@ public class Menu {
 	public Menu() {
 		this.color = new Color();
 		this.header = new String [][]{
-				{"-----------------------------------------------------------------------------------"},
+				{"------------------------------------------------------------------------------------"},
 				{"  ___     _   _     _  _                        ___  _    _           _    _   _   "},
 				{" | _ )___| |_| |_  (_)(_)_ _ __ _ ___ _ _ ___  |   \\(_)__| |_    _ _ (_)__| |_| |_ "},
 				{" | _ / _ |  _|  _| / _` | '_/ _` / -_| '_/ -_) | |) | / _| ' \\  | ' \\| / _| ' |  _|"},
 				{" |___\\___/\\__|\\__| \\__,_|_| \\__, \\___|_| \\___| |___/|_\\__|_||_| |_||_|_\\__|_||_\\__|"},
 				{"                            |___/                                                  "},
-				{"-----------------------------------------------------------------------------------"},
+				{"------------------------------------------------------------------------------------"},
 				};
 		this.keyReader = new BufferedReader(new InputStreamReader(System.in));
 	}
@@ -82,20 +79,21 @@ public class Menu {
 		result = result.replaceAll("\n", "").replaceAll("\r", "");
 		return result;
 	}
-
-	public int inputNumber() {
-		int result = -1;
-		do {
-			try {
-				System.out.print("Please enter number: ");
-				result = Integer.parseInt(keyReader.readLine());
-			} catch (Exception e) {
-				System.err.println("Input is not a usable number");
-			}
-		} while(result == -1);
+	
+	public String inputString(String askString) {
+		String result = "";
+		try {
+			System.out.print("Please enter "+ askString +": ");
+			result = keyReader.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		// cleanup result
+		// sometimes the plot format will be changed without cleanup
+		result = result.replaceAll("\n", "").replaceAll("\r", "");
 		return result;
 	}
-	
+
 	// plot menu
 	public void plotMenu(ArrayList<MenuItem> menuItems, String header) {
 		// print menuHeader
@@ -122,7 +120,6 @@ public class Menu {
 	public ArrayList<File> getAllFiles(String path) {
 	    File folder = new File(path);
 	    File[] listOfFiles = folder.listFiles();
-	    int count = 0;
 	    ArrayList<File> files = new ArrayList<>();
 	    for(File f: listOfFiles) {
 	    	if(f.getName().endsWith(".json")) {
@@ -149,6 +146,7 @@ public class Menu {
 		mainMenu.add(new MenuItem("save current game", "s" , 2 ));
 		mainMenu.add(new MenuItem("load existing game", "l" , 3 ));
 		mainMenu.add(new MenuItem("edit saved users", "e", 4));
+		mainMenu.add(new MenuItem("highscore", "h", 5));
 		mainMenu.add(new MenuItem("quit", "q" , 99 ));
 		return mainMenu;
 	}
@@ -187,23 +185,46 @@ public class Menu {
 		return editMenu;
 	}
 	
-	public ArrayList<MenuItem> playerList(ArrayList<File> files){
-		ArrayList<MenuItem> playerList = new ArrayList<>();
-		playerList.add(new MenuItem("back to menu", "b" , 99 ));
+	public ArrayList<MenuItem> loadMenu(ArrayList<File> files){
+		ArrayList<MenuItem> loadMenu = new ArrayList<>();
+		loadMenu.add(new MenuItem("remove", "r" , 0 ));
+		loadMenu.add(new MenuItem("load", "l" , 1 ));
+		loadMenu.add(new MenuItem("back to menu", "b" , 99 ));
+		loadMenu.add(new MenuItem("", "" , -1 ));
+		loadMenu.add(new MenuItem("*** Game list ***", "" , -1 ));
 		if(files.size() == 0) {
-			playerList.add(new MenuItem("no users available!", "" , -1 ));
+			loadMenu.add(new MenuItem("no game available!", "" , -1 ));
 		}
 		for(int i=0; i<files.size(); i++) {
-			playerList.add(new MenuItem(files.get(i).getName().replaceAll(".json", ""), ""+i , i ));
+			loadMenu.add(new MenuItem(files.get(i).getName().replaceAll(".json", ""), "" , -1 ));
 		}
-		return playerList;
+		return loadMenu;
+	}
+	
+	public ArrayList<MenuItem> saveMenu(){
+		ArrayList<MenuItem> saveMenu = new ArrayList<>();
+		saveMenu.add(new MenuItem("save current game", "s" , 0 ));
+		saveMenu.add(new MenuItem("back to menu", "b" , 99 ));
+		return saveMenu;
+	}
+	
+	public ArrayList<MenuItem> fileList(ArrayList<File> files){
+		ArrayList<MenuItem> fileList = new ArrayList<>();
+		fileList.add(new MenuItem("back to menu", "b" , 99 ));
+		if(files.size() == 0) {
+			fileList.add(new MenuItem("no file available!", "" , -1 ));
+		}
+		for(int i=0; i<files.size(); i++) {
+			fileList.add(new MenuItem(files.get(i).getName().replaceAll(".json", ""), ""+i , i ));
+		}
+		return fileList;
 	}
 	
 	public ArrayList<MenuItem> tokenMenu(ArrayList<Integer> tokens, int roll, Player p){
 		ArrayList<MenuItem> tokenMenu = new ArrayList<>();
 		tokenMenu.add(new MenuItem("*** " + p.getColor().getCode() + p.getName() + color.reset() + " ***", "@", -1));
 		for(int token: tokens) {
-			tokenMenu.add(new MenuItem("Token: " + token, String.valueOf(token) , -1));
+			tokenMenu.add(new MenuItem("Token: " + token, ""+token , -1));
 		}
 		tokenMenu.add(new MenuItem("", "@", -1));
 		ArrayList<String> dice = this.getDice(roll);
@@ -251,43 +272,4 @@ public class Menu {
 		list.add("+---------+");
 		return list;
 	}
-	
-	
-	
-	// new menuItem("text",'key', return value in integer)
-	// return value of -1 == no function
-	// key == '@' -> ignor the key
-	
-	/*public ArrayList<MenuItem> colorMenu(String[] colorList){
-		ArrayList<MenuItem> colorMenu = new ArrayList<>();
-		for(int c=0; c<colorList.length; c++) {
-			if(colorList[c] != "") {
-				switch(colorList[c]) {
-				// blue
-				case "\u001b[34m":
-					colorMenu.add(new MenuItem(this.color.getColorName(colorList[c]), 'b', 1));
-					// green
-				case "\u001b[32m":
-					colorMenu.add(new MenuItem(this.color.getColorName(colorList[c]), 'g', 2));
-					// red
-				case "\u001b[31m":
-					colorMenu.add(new MenuItem(this.color.getColorName(colorList[c]), 'r', 3));
-					// yellow
-				case "\u001b[33m":
-					colorMenu.add(new MenuItem(this.color.getColorName(colorList[c]), 'y', 1));
-				}
-			}
-		}
-		return colorMenu;
-	}
-		public ArrayList<MenuItem> playerList(ArrayList<File> files){
-		ArrayList<MenuItem> playerList = new ArrayList<>();
-		for(int i=1; i<files.size();i++) {
-			playerList.add(new MenuItem(files.get(i).getName().replaceAll(".json", ""), i , i ));
-		}
-		playerList.add(new MenuItem("create one", 0 , 998));
-		playerList.add(new MenuItem("back to menu", 999 , 999));
-		return playerList;
-	}*/
-
 }

@@ -1,6 +1,4 @@
 import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -12,7 +10,7 @@ public class Game {
 	private String playerPath;
 	
 	// constructor 
-	public Game() throws IOException{
+	public Game(){
 		this.color = new Color();
 		this.board = new Board();
 		this.menu = new Menu();
@@ -24,6 +22,13 @@ public class Game {
 
 	
 	public void run(){
+		// check if directories exist
+		if(!this.board.getScore().checkDirExist(this.playerPath)) {
+			new File(this.playerPath).mkdirs();
+		}
+		if(!this.board.getScore().checkDirExist(this.scorePath)) {
+			new File(this.scorePath).mkdirs();
+		}
 		// mainMenu
 		int result;
 		do {
@@ -50,6 +55,11 @@ public class Game {
 			case 4:
 				this.editUserMenu();
 				break;
+			// highScore
+			case 5:
+				// @
+				System.out.println("Highscore");
+				break;
 			// quit
 			case 99:
 				this.quit();
@@ -73,6 +83,7 @@ public class Game {
 				case 4:
 					this.board.getScore().init(result);
 					this.resume();
+					result = 99;
 					break;
 				// back
 				case 99:
@@ -89,32 +100,139 @@ public class Game {
 		this.playGame();
 	}
 	
-	// save function
+	// save menu
 	public void saveCurrentGame() {
-		//@
-		//
-		System.out.println("save");
-		System.out.println(this.scorePath);
-		System.out.println(this.playerPath);
+		String createTime = this.board.getScore().getCreateTime();
+		// create a file and save it
+		this.board.getScore().save2File(this.scorePath, createTime);
+		System.out.println("Game saves as: " + createTime);
+		this.sleep(1000);
 	}
 	
-	//load function
+	//load menu
 	public void loadExistingGame() {
-		// @
-		// list all available files
-		// which file to load
-		// load file by name / key
-		// resume to loaded game
-		//this.resume();
-		System.out.println("load");
+		int result = -1;
+		do {
+			result = this.menu.selectMenu(this.menu.loadMenu(this.menu.getAllFiles(this.scorePath)), "File menu");
+			switch(result) {
+				// remove
+				case 0:
+					this.removeFile();
+					break;
+				// load
+				case 1:
+					if(this.loadFile()) {
+						this.resume();
+						result = 99;
+					}
+					break;
+				// back
+				case 99:
+					break;
+				default:
+					System.err.println("Invalid key!");
+					this.sleep(500);
+					break;
+			}
+		} while(result != 99);
 	}
+	
+	public boolean loadFile() {
+		String name = "";
+		int result = -1;
+		ArrayList<File> fileNames= new ArrayList<>();
+		do {
+			fileNames = this.menu.getAllFiles(this.scorePath);
+			result = this.menu.selectMenu(this.menu.fileList(fileNames), "Which Game do you want to load?");
+			// back to menu
+			switch(result) {
+			// back
+			case 99:
+				name = " ";
+				break;
+			default:
+				// if game does not exist
+				if(result == -1) {
+					System.err.println("Invalid key!");
+					this.sleep(1000);
+					break;
+				}
+				name = fileNames.get(result).getName().replace(".json", "");
+				result = -1;
+				do {
+					result = this.menu.selectMenu(this.menu.yesNo(), "Load game with name: " + name);
+					switch(result) {
+					// no
+					case 0:
+						break;
+					// yes
+					case 1:
+						this.board.getScore().loadFromFile(this.scorePath, name);
+						System.out.println("Game: " + name + " was loaded.");
+						this.sleep(1500);
+						return true;
+					default:
+						result = -1;
+						System.err.println("Invalid key!");
+						this.sleep(1000);
+						break;
+					}
+				} while(result == -1);
+				break;
+			}
+		} while("".equals(name));
+		return false;
+	}
+	
+	public void removeFile() {
+		String name = "";
+		int result = -1;
+		ArrayList<File> fileNames= new ArrayList<>();
+		do {
+			fileNames = this.menu.getAllFiles(this.scorePath);
+			result = this.menu.selectMenu(this.menu.fileList(fileNames), "Which Game do you want to remove?");
+			// back to menu
+			switch(result) {
+			// back
+			case 99:
+				name = " ";
+				break;
+			default:
+				// if game does not exist
+				if(result == -1) {
+					System.err.println("Invalid key!");
+					this.sleep(1000);
+					break;
+				}
+				name = fileNames.get(result).getName().replace(".json", "");
+				result = -1;
+				do {
+					result = this.menu.selectMenu(this.menu.yesNo(), "Remove game with name: " + name);
+					switch(result) {
+					// no
+					case 0:
+						break;
+					// yes
+					case 1:
+						File f = new File(this.scorePath + "/" + name + ".json");
+						f.delete();
+						System.out.println("Game " + name + " is removed.");
+						this.sleep(1500);
+						break;
+					default:
+						result = -1;
+						System.err.println("Invalid key!");
+						this.sleep(1000);
+						break;
+					}
+				} while(result == -1);
+				break;
+			}
+		} while("".equals(name));
+	}
+	
 	// user menu
 	public void editUserMenu() {
-		// @
-		// list all available users
-		// which user to load
-		// edit user by input
-		// save user
 		int result = -1;
 		do {
 			result = this.menu.selectMenu(this.menu.editMenu(this.menu.getAllFiles(this.playerPath)), "Player menu");
@@ -125,10 +243,6 @@ public class Game {
 					break;
 				// edit
 				case 1:
-					// @
-					// load
-					// change
-					// save
 					this.editUser();
 					break;
 				// remove
@@ -153,7 +267,7 @@ public class Game {
 			this.menu.plotHeader();
 			System.out.println("\t\t\t*** Enter new name ***");
 			// get new name
-			name = this.menu.inputString();
+			name = this.menu.inputString("name");
 			// check if name already exist
 			for(File file: fileNames) {
 				if(file.getName().replaceAll(".json", "").equals(name)) {
@@ -177,7 +291,7 @@ public class Game {
 		ArrayList<File> fileNames= new ArrayList<>();
 		do {
 			fileNames = this.menu.getAllFiles(this.playerPath);
-			result = this.menu.selectMenu(this.menu.playerList(fileNames), "Which player do you want to edit?");
+			result = this.menu.selectMenu(this.menu.fileList(fileNames), "Which player do you want to edit?");
 			// back to menu
 			switch(result) {
 			// back
@@ -201,7 +315,7 @@ public class Game {
 					this.menu.plotHeader();
 					System.out.println("\t\t\t*** Enter new name ***");
 					// get new name
-					newName = this.menu.inputString();
+					newName = this.menu.inputString("name");
 					// check if name already exist
 					for(File file: fileNames) {
 						if(file.getName().replaceAll(".json", "").equals(newName)) {
@@ -219,19 +333,18 @@ public class Game {
 						this.sleep(1500);
 					}
 				} while("".equals(newName));
-				
-				
 				break;
 			}
 		} while("".equals(name));
 	}
+	
 	public void removeUser() {
 		String name = "";
 		int result = -1;
 		ArrayList<File> fileNames= new ArrayList<>();
 		do {
 			fileNames = this.menu.getAllFiles(this.playerPath);
-			result = this.menu.selectMenu(this.menu.playerList(fileNames), "Which player do you want to remove?");
+			result = this.menu.selectMenu(this.menu.fileList(fileNames), "Which player do you want to remove?");
 			// back to menu
 			switch(result) {
 			// back
@@ -320,7 +433,7 @@ public class Game {
 						tokenNumber = 64;
 						System.out.print("Your rolled: "+ roll + ". No move is possible. Skipping...");
 						// delay to read the not movable text better
-						this.sleep(500);
+						this.sleep(1000);
 					}
 					// pass
 					if(tokenNumber == 64) {
