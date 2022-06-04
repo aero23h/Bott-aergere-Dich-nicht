@@ -25,17 +25,16 @@ public class Score {
 		this.players = new Player[4];
 		this.noPlayer = new Player("", color.getReset(), -1);
 		this.createTime = LocalDateTime.now().withNano(0).toString().replaceAll(":", "-");
-		System.out.println(this.createTime);
 		// default init
 		this.init(4);
 	}
 	
 	public void init(int playerCount) {
 		// default player
-		this.players[0] = new Player("Player A", color.getBlue(), 0);
-		this.players[1] = new Player("Player B", color.getGreen(), 1);
-		this.players[2] = new Player("Player C", color.getRed(), 2);
-		this.players[3] = new Player("Player D", color.getYellow(), 3);
+		this.players[0] = new Player("", color.getBlue(), 0);
+		this.players[1] = new Player("", color.getGreen(), 1);
+		this.players[2] = new Player("", color.getRed(), 2);
+		this.players[3] = new Player("", color.getYellow(), 3);
 		
 		// TokenNumber AB-A is PlayerID, B is TokenNumber eg 13 - playerID B token 3
 		this.startBoard = new int[] {01,03,02,04,11,12,13,14,21,22,23,24,31,33,32,34};
@@ -53,8 +52,35 @@ public class Score {
 		// initialize empty board arrays
 		this.goalBoard = new int[16];
 		this.onBoard = new int[40];
-		
 	}
+	
+	public void setPlayer(Player newPlayer) {
+		switch(newPlayer.getColor().getName()) {
+		// blue
+		case "blue":
+			newPlayer.setId(0);
+			this.players[0] = newPlayer;
+			break;
+		// green
+		case "green":
+			newPlayer.setId(1);
+			this.players[1] = newPlayer;
+			break;
+		// red
+		case "red":
+			newPlayer.setId(2);
+			this.players[2] = newPlayer;
+			break;
+		// yellow
+		case "yellow":
+			newPlayer.setId(3);
+			this.players[3] = newPlayer;
+			break;
+		default:
+			break;
+		}
+	}
+	
 	
 	public boolean isPlayerAlreadyPlaying(Player player) {
 		for(Player p: this.getPlayers()) {

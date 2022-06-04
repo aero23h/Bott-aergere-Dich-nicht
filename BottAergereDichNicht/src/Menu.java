@@ -215,7 +215,15 @@ public class Menu {
 			fileList.add(new MenuItem("no file available!", "" , -1 ));
 		}
 		for(int i=0; i<files.size(); i++) {
-			fileList.add(new MenuItem(files.get(i).getName().replaceAll(".json", ""), ""+i , i ));
+			fileList.add(new MenuItem(files.get(i).getName().replaceAll(".json", ""), ""+(i+1) , i ));
+		}
+		return fileList;
+	}
+	
+	public ArrayList<MenuItem> colorMenu(ArrayList<ColorItem> color){
+		ArrayList<MenuItem> fileList = new ArrayList<>();
+		for(int i=0; i<color.size(); i++) {
+			fileList.add(new MenuItem(new Color().getColoredName(color.get(i)), ""+(i+1) , i ));
 		}
 		return fileList;
 	}

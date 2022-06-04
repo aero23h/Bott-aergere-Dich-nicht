@@ -81,8 +81,33 @@ public class Game {
 				case 2:
 				case 3:
 				case 4:
+					// initialize board by number of players
 					this.board.getScore().init(result);
-					this.resume();
+					// get all players
+					ArrayList<File> availablePlayers= this.menu.getAllFiles(this.playerPath);
+					// loop over number of playing players
+					for(int i=0; i<result; i++) {
+						// select
+						Player p = this.getPlayer(availablePlayers);
+						if(p == null) {
+							this.board.getScore().init(4);
+							result = 99;
+							break;
+						}
+						// remove player from availablePlayers
+						for(int j=0; j<availablePlayers.size(); j++) {
+							if(availablePlayers.get(j).getName().replaceAll(".json", "").equals(p.getName())) {
+								availablePlayers.remove(j);
+							}
+						
+						}
+						p.setColor(this.getColor(p, result));
+						this.board.getScore().setPlayer(p);
+					}
+					// start game
+					if(result != 99) {
+						this.resume();
+					}
 					result = 99;
 					break;
 				// back
@@ -93,6 +118,55 @@ public class Game {
 					break;
 			}
 		} while(result != 99);
+	}
+	
+	public ColorItem getColor(Player p, int amountPlayers) {
+		int result = -1;
+		ColorItem c = null;
+		ArrayList<ColorItem> colorList = this.checkAvailableColor(this.board.getScore().getPlayers(), amountPlayers);
+		do {
+			result = this.menu.selectMenu(this.menu.colorMenu(colorList), "Select color for " + p.getName());
+			// back to menu
+			switch(result) {
+			default:
+				// if color not exist
+				if(result == -1) {
+					System.err.println("Invalid key!");
+					this.sleep(1000);
+					break;
+				}
+				// color exist
+				c = colorList.get(result);
+				break;
+			}
+		} while(c == null);
+		return c;
+		
+	}
+	
+	public Player getPlayer(ArrayList<File> availablePlayers) {
+		int result = -1;
+		Player p = null;
+		do {
+			result = this.menu.selectMenu(this.menu.fileList(availablePlayers), "Select player");
+			// back to menu
+			switch(result) {
+			// back
+			case 99:
+				break;
+			default:
+				// if player not exist
+				if(result == -1) {
+					System.err.println("Invalid key!");
+					this.sleep(1000);
+					break;
+				}
+				// player exist
+				p = new Player().loadFromFile(this.playerPath, availablePlayers.get(result).getName().replace(".json", ""));
+				break;
+			}
+		} while((p == null) && !(result == 99) );
+		return p;
 	}
 	
 	
@@ -401,6 +475,16 @@ public class Game {
 				}
 		}
 		return tokenList;
+	}
+	
+	public ArrayList<ColorItem> checkAvailableColor(Player[] players, int amountPlayers){
+		ArrayList<ColorItem> colorList = new ArrayList<>();
+		for(int i=0; i<amountPlayers; i++) {
+			if(players[i].getName().equals("")) {
+				colorList.add(players[i].getColor());
+			}
+		}
+		return colorList;
 	}
 	
 	public void playGame(){

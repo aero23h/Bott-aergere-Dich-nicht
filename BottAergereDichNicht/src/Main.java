@@ -10,11 +10,11 @@ public class Main {
 			// fix checkMoves
 			// add playerAttributes
 			// add scoreBoard
-			// add select player on new
 			// add color to board
 			// add something when player won
 			// add something while quitting
 			// add player save when saving a game
+			// block resume while nothing loaded or created successfully
 	}
 
 }
