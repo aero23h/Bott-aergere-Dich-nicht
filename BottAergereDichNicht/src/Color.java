@@ -18,31 +18,31 @@ public class Color {
 	}
 	
 	public ColorItem getRed() {
-		return red;
+		return this.red;
 	}
 	public void setRed(ColorItem red) {
 		this.red = red;
 	}
 	public ColorItem getGreen() {
-		return green;
+		return this.green;
 	}
 	public void setGreen(ColorItem green) {
 		this.green = green;
 	}
 	public ColorItem getBlue() {
-		return blue;
+		return this.blue;
 	}
 	public void setBlue(ColorItem blue) {
 		this.blue = blue;
 	}
 	public ColorItem getYellow() {
-		return yellow;
+		return this.yellow;
 	}
 	public void setYellow(ColorItem yellow) {
 		this.yellow = yellow;
 	}
 	public ColorItem getReset() {
-		return reset;
+		return this.reset;
 	}
 	public void setReset(ColorItem reset) {
 		this.reset = reset;

@@ -49,10 +49,16 @@ public class Board {
 	
 	public boolean didWin() {
 		for(int i=0; i<4; i++) {
-			if(this.score.getGoalBoard()[this.getActPlayer().getId()*4+i] == 0){
+			if(this.score.getGoalBoard()[this.actPlayer.getId()*4+i] == 0){
 				// player did not win
 				return false;
 			}
+		}
+		// set wins attribute +1
+		this.actPlayer.setWins(this.actPlayer.getWins() + 1);
+		// set total played +1 for every player who played
+		for(Player p: this.score.getPlayers()) {
+			p.setTotalPlayed(p.getTotalPlayed() +1);
 		}
 		// player win
 		return true;
@@ -134,7 +140,7 @@ public class Board {
 	}
 
 	public Score getScore() {
-		return score;
+		return this.score;
 	}
 
 	public void setScore(Score score) {
@@ -142,11 +148,11 @@ public class Board {
 	}
 
 	public String[][] getEmptyBoard() {
-		return emptyBoard;
+		return this.emptyBoard;
 	}
 
 	public Player getActPlayer() {
-		return actPlayer;
+		return this.actPlayer;
 	}
 
 	public void setActPlayer(Player actPlayer) {

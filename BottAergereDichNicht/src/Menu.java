@@ -129,8 +129,39 @@ public class Menu {
 		return files;
 	}
 	
+	public ArrayList<Player> getAllPlayersFromDir(String path){
+		ArrayList<Player> players = new ArrayList<>();
+		ArrayList<File> files = this.getAllFiles(path);
+		for(File f: files) {
+			players.add(new Player().loadFromFile(path, f.getName().replaceAll(".json", "")));
+		}
+		return players;
+	}
+	
 	// ########################################################################################
 	// build menu
+	
+	public ArrayList<MenuItem> highScoreMenu(ArrayList<Player> players){
+		ArrayList<MenuItem> highScoreMenu = new ArrayList<>();
+		highScoreMenu.add(new MenuItem("back to menu", "b", 99));
+		highScoreMenu.add(new MenuItem("\rName:\t\t\t\twins\t\trolled 6:\tplayed:", "", -1));
+		for(int i=0; i<players.size(); i++) {
+			String name = players.get(i).getName();
+			String wins = ""+players.get(i).getWins();
+			String timesRolled6 = ""+players.get(i).getTimesRolled6();
+			String timesPlayed = ""+players.get(i).getTotalPlayed();
+			int newTab = 4 - (name.length()/8);
+			String tabs = "";
+			for(int j=0; j<newTab; j++){
+				tabs += "\t";
+			}
+			String text = "\r"+ name +tabs+ wins +"\t\t"+ timesRolled6 +"\t\t"+ timesPlayed;
+			highScoreMenu.add(new MenuItem("\r--------------------------------------------------------------------------", "", -1));
+			highScoreMenu.add(new MenuItem(text, "", -1));
+			
+		}
+		return highScoreMenu;
+	}
 	
 	public ArrayList<MenuItem> yesNo(){
 		ArrayList<MenuItem> yesNo = new ArrayList<>();

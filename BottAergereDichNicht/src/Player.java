@@ -2,9 +2,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 
-import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
-import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
@@ -12,18 +10,19 @@ public class Player {
 	private String name;
 	private ColorItem color;
 	private int id;
-	// addition possible
-	//private int timesPlayed;
-		// select player
-	//private int wins;
-	//private int timesRolled6;
-		// logic
+	// scoreBoard informations
+	private int wins;
+	private int totalPlayed;
+	private int timesRolled6;
 	
 	public Player() {
+		this.wins = 0;
+		this.timesRolled6 = 0;
+		this.totalPlayed = 0;
 	}
 	
-	
 	public Player(String name, ColorItem color) {
+		this();
 		this.name = name;
 		this.color = color;
 	}
@@ -50,26 +49,16 @@ public class Player {
 	    try {
 			writer.writeValue(Paths.get(path + "/" + this.getName() + ".json").toFile(), this);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
 	public Player loadFromFile(String path, String playerName){
 		ObjectMapper mapper = new ObjectMapper();
-	    Player ld = null;
-	    Player p = null;
+	    Player p = new Player();
 		try {
-			ld = mapper.readValue(Paths.get(path + "/" + playerName + ".json").toFile(), Player.class);
-		    p = new Player(ld.getName(), ld.getColor(), ld.getId());
-		} catch (StreamReadException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (DatabindException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			p = mapper.readValue(Paths.get(path + "/" + playerName + ".json").toFile(), Player.class);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	    return p;
@@ -77,14 +66,14 @@ public class Player {
 	
 	// ######################################################################################################################
 	public String getName() {
-		return name;
+		return this.name;
 	}
 	public void setName(String name) {
 		this.name = name;
 	}
 
 	public ColorItem getColor() {
-		return color;
+		return this.color;
 	}
 
 	public void setColor(ColorItem color) {
@@ -92,11 +81,38 @@ public class Player {
 	}
 
 	public int getId() {
-		return id;
+		return this.id;
 	}
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public int getWins() {
+		return this.wins;
+	}
+
+
+	public void setWins(int wins) {
+		this.wins = wins;
+	}
+
+
+	public int getTimesRolled6() {
+		return this.timesRolled6;
+	}
+
+
+	public void setTimesRolled6(int timesRolled6) {
+		this.timesRolled6 = timesRolled6;
+	}
+
+	public int getTotalPlayed() {
+		return this.totalPlayed;
+	}
+
+	public void setTotalPlayed(int toalPlayed) {
+		this.totalPlayed = toalPlayed;
 	}
 
 

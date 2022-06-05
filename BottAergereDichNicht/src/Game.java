@@ -57,8 +57,7 @@ public class Game {
 				break;
 			// highScore
 			case 5:
-				// @
-				System.out.println("Highscore");
+				this.highScoreMenu();
 				break;
 			// quit
 			case 99:
@@ -69,6 +68,19 @@ public class Game {
 				break;
 			}
 			
+		} while(result != 99);
+	}
+	
+	public void highScoreMenu() {
+		int result = -1;
+		ArrayList<Player> players = this.menu.getAllPlayersFromDir(this.playerPath);
+		do {
+			result = this.menu.selectMenu(this.menu.highScoreMenu(players), "Scoreboard");
+			switch(result){
+			// back
+			case 99:
+				break;
+			}
 		} while(result != 99);
 	}
 	
@@ -167,8 +179,7 @@ public class Game {
 			}
 		} while((p == null) && !(result == 99) );
 		return p;
-	}
-	
+	}	
 	
 	public void resume() {
 		this.playGame();
@@ -179,6 +190,13 @@ public class Game {
 		String createTime = this.board.getScore().getCreateTime();
 		// create a file and save it
 		this.board.getScore().save2File(this.scorePath, createTime);
+		
+		for(Player p: this.board.getScore().getPlayers()) {
+			// if playerName is not default ""
+			if(!p.getName().equals("")) {
+				p.save2File(this.playerPath);
+			}
+		}
 		System.out.println("Game saves as: " + createTime);
 		this.sleep(1000);
 	}
@@ -340,6 +358,7 @@ public class Game {
 		do {
 			this.menu.plotHeader();
 			System.out.println("\t\t\t*** Enter new name ***");
+			System.out.println("\t\t*** No special characters allowed! ***");
 			// get new name
 			name = this.menu.inputString("name");
 			// check if name already exist
@@ -502,6 +521,10 @@ public class Game {
 			case 0:
 				// play
 				int roll = this.board.getScore().roll();
+				// set attribute timesRolled6 +1
+				if(roll == 6) {
+					this.board.getActPlayer().setTimesRolled6(this.board.getActPlayer().getTimesRolled6() +1);
+				}
 				int tokenNumber = -1;
 				int token = 0;
 				ArrayList<Integer> tokenList;
@@ -541,6 +564,7 @@ public class Game {
 			}
 		// while no player win
 		} while(!quit & !this.board.didWin());
+		
 		// do something when player win
 		// fancy player display who win
 		//@
@@ -557,20 +581,20 @@ public class Game {
 	// ########################################################################################
 	// getter setter
 	public Board getBoard() {
-		return board;
+		return this.board;
 	}
 	public void setBoard(Board board) {
 		this.board = board;
 	}
 	public Menu getMenu() {
-		return menu;
+		return this.menu;
 	}
 	public void setMenu(Menu menu) {
 		this.menu = menu;
 	}
 
 	public String getScorePath() {
-		return scorePath;
+		return this.scorePath;
 	}
 
 	public void setScorePath(String scorePath) {
@@ -578,7 +602,7 @@ public class Game {
 	}
 	
 	public String getPlayerPath() {
-		return playerPath;
+		return this.playerPath;
 	}
 
 	public void setPlayerPath(String playerPath) {

@@ -11,7 +11,7 @@ public class MenuItem {
 	}
 
 	public String getText() {
-		return text;
+		return this.text;
 	}
 
 	public void setText(String text) {
@@ -19,7 +19,7 @@ public class MenuItem {
 	}
 
 	public String getKey() {
-		return key;
+		return this.key;
 	}
 
 	public void setKey(String key) {
@@ -27,7 +27,7 @@ public class MenuItem {
 	}
 
 	public int getResult() {
-		return result;
+		return this.result;
 	}
 
 	public void setResult(int result) {

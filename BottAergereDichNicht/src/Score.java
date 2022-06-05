@@ -363,7 +363,7 @@ public class Score {
 	}
 
 	public int[] getStartBoard() {
-		return startBoard;
+		return this.startBoard;
 	}
 
 	public void setStartBoard(int[] startBoard) {
@@ -371,7 +371,7 @@ public class Score {
 	}
 
 	public int[] getGoalBoard() {
-		return goalBoard;
+		return this.goalBoard;
 	}
 
 	public void setGoalBoard(int[] goalBoard) {
@@ -379,7 +379,7 @@ public class Score {
 	}
 
 	public int[] getOnBoard() {
-		return onBoard;
+		return this.onBoard;
 	}
 
 	public void setOnBoard(int[] onBoard) {
@@ -387,7 +387,7 @@ public class Score {
 	}
 
 	public Player[] getPlayers() {
-		return players;
+		return this.players;
 	}
 
 	public void setPlayers(Player[] players) {
@@ -395,7 +395,7 @@ public class Score {
 	}
 
 	public Player getNoPlayer() {
-		return noPlayer;
+		return this.noPlayer;
 	}
 
 	public void setNoPlayer(Player noPlayer) {
@@ -403,7 +403,7 @@ public class Score {
 	}
 
 	public String getCreateTime() {
-		return createTime;
+		return this.createTime;
 	}
 
 	public void setCreateTime(String createTime) {
