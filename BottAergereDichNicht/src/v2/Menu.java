@@ -1,3 +1,4 @@
+package v2;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -137,15 +138,6 @@ public class Menu {
 		return cloneList;
 	}
 	
-	public ArrayList<Player> getAllPlayersFromDir(String path){
-		ArrayList<Player> players = new ArrayList<>();
-		ArrayList<File> files = this.getAllFiles(path);
-		for(File f: files) {
-			players.add(new Player().loadFromFile(path, f.getName().replaceAll(".json", "")));
-		}
-		return players;
-	}
-	
 	public ArrayList<Score> getAllScoresFromDir(String path){
 		ArrayList<Score> scores = new ArrayList<>();
 		ArrayList<File> files = this.getAllFiles(path);
@@ -191,9 +183,10 @@ public class Menu {
 		ArrayList<MenuItem> mainMenu = new ArrayList<>();
 		mainMenu.add(new MenuItem("new", "n" , 0 ));
 		mainMenu.add(new MenuItem("resume", "r" , 1 ));
-		mainMenu.add(new MenuItem("save current game", "s" , 2 ));
 		mainMenu.add(new MenuItem("load existing game", "l" , 3 ));
-		mainMenu.add(new MenuItem("edit saved users", "e", 4));
+		mainMenu.add(new MenuItem("save current game", "s" , 2 ));
+		mainMenu.add(new MenuItem("delete existing game", "d" , 6 ));
+		mainMenu.add(new MenuItem("user menu", "u", 4));
 		mainMenu.add(new MenuItem("highscore", "h", 5));
 		mainMenu.add(new MenuItem("quit", "q" , 99 ));
 		return mainMenu;
@@ -223,27 +216,23 @@ public class Menu {
 		return playerAmountMenu;
 	}
 	
-	public ArrayList<MenuItem> editMenu(ArrayList<Player> p){
+	public ArrayList<MenuItem> userMenu(ArrayList<Player> p){
 		ArrayList<MenuItem> editMenu = new ArrayList<>();
 		editMenu.add(new MenuItem("Create new", "n" , 0 ));
 		editMenu.add(new MenuItem("edit", "e", 1));
-		editMenu.add(new MenuItem("remove", "r", 2));
 		editMenu.add(new MenuItem("back to menu", "b" , 99 ));
 		editMenu.add(new MenuItem("", "" , -1 ));
 		editMenu.add(new MenuItem("*** Player list ***", "" , -1 ));
-		if(p.size() == 0) {
-			editMenu.add(new MenuItem("no users available!", "" , -1 ));
-		}
 		for(int i=0; i<p.size(); i++) {
-			editMenu.add(new MenuItem(p.get(i).getName(), "" , -1 ));
+			if(p.get(i).isVisible()) {
+				editMenu.add(new MenuItem(p.get(i).getName(), "" , -1 ));
+			}
 		}
 		return editMenu;
 	}
 	
-	public ArrayList<MenuItem> loadMenu(ArrayList<Score> files){
+	public ArrayList<MenuItem> fileListMenu(ArrayList<Score> files){
 		ArrayList<MenuItem> loadMenu = new ArrayList<>();
-		loadMenu.add(new MenuItem("remove", "r" , 0 ));
-		loadMenu.add(new MenuItem("load", "l" , 1 ));
 		loadMenu.add(new MenuItem("back to menu", "b" , 99 ));
 		loadMenu.add(new MenuItem("", "" , -1 ));
 		loadMenu.add(new MenuItem("*** Game list ***", "" , -1 ));
@@ -251,7 +240,7 @@ public class Menu {
 			loadMenu.add(new MenuItem("no game available!", "" , -1 ));
 		}
 		for(int i=0; i<files.size(); i++) {
-			loadMenu.add(new MenuItem(files.get(i).getCreateTime(), "" , -1 ));
+			loadMenu.add(new MenuItem(files.get(i).getCreateTime(), ""+(i+1) , i ));
 		}
 		return loadMenu;
 	}
@@ -263,26 +252,15 @@ public class Menu {
 		return saveMenu;
 	}
 	
-	public ArrayList<MenuItem> fileListPlayer(ArrayList<Player> player){
+	public ArrayList<MenuItem> listPlayer(ArrayList<Player> players){
 		ArrayList<MenuItem> fileList = new ArrayList<>();
 		fileList.add(new MenuItem("back to menu", "b" , 99 ));
-		if(player.size() == 0) {
-			fileList.add(new MenuItem("no player available!", "" , -1 ));
-		}
-		for(int i=0; i<player.size(); i++) {
-			fileList.add(new MenuItem(player.get(i).getName().replaceAll(".json", ""), ""+(i+1) , i ));
-		}
-		return fileList;
-	}
-	
-	public ArrayList<MenuItem> fileListScore(ArrayList<Score> score){
-		ArrayList<MenuItem> fileList = new ArrayList<>();
-		fileList.add(new MenuItem("back to menu", "b" , 99 ));
-		if(score.size() == 0) {
-			fileList.add(new MenuItem("no game available!", "" , -1 ));
-		}
-		for(int i=0; i<score.size(); i++) {
-			fileList.add(new MenuItem(score.get(i).getCreateTime(), ""+(i+1) , i ));
+		int counter = 1;
+		for(int i=0; i<players.size(); i++) {
+			if(players.get(i).isVisible()) {
+				fileList.add(new MenuItem(players.get(i).getName(), ""+(counter) , i ));
+				counter +=1;
+			}
 		}
 		return fileList;
 	}
