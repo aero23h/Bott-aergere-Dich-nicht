@@ -6,8 +6,8 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/alex/OneDrive/Projekt/jackson-core-2.13.3.jar"/>
-	<classpathentry kind="lib" path="C:/Users/alex/OneDrive/Projekt/jackson-databind-2.13.3.jar"/>
-	<classpathentry kind="lib" path="C:/Users/alex/OneDrive/Projekt/jackson-annotations-2.13.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/huefn/OneDrive/FOS/Programmieren/Projekt/jackson-core-2.13.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/huefn/OneDrive/FOS/Programmieren/Projekt/jackson-databind-2.13.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/huefn/OneDrive/FOS/Programmieren/Projekt/jackson-annotations-2.13.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

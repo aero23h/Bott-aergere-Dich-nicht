@@ -361,6 +361,8 @@ public class Game {
 			System.out.println("\t\t*** No special characters allowed! ***");
 			// get new name
 			name = this.menu.inputString("name");
+			// replace special characters
+			name = name.replaceAll("[^\\p{Alpha}]+","");
 			// check if name already exist
 			for(File file: fileNames) {
 				if(file.getName().replaceAll(".json", "").equals(name)) {
