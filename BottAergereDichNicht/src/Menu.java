@@ -190,6 +190,13 @@ public class Menu {
 		return playerMenu;
 	}
 	
+	public ArrayList<MenuItem> fancyWinMenu(Player p){
+		ArrayList<MenuItem> playerMenu = new ArrayList<>();
+		playerMenu.add(new MenuItem("*** " + p.getColor().getCode() + p.getName() + color.reset() + " won the game! ***", "@", -1));
+		playerMenu.add(new MenuItem("back to menu", "b", 99));
+		return playerMenu;
+	}
+	
 	public ArrayList<MenuItem> playerAmountMenu(){
 		ArrayList<MenuItem> playerAmountMenu = new ArrayList<>();
 		for(int i=2; i<=4;i++) {

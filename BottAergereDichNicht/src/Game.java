@@ -111,11 +111,11 @@ public class Game {
 							if(availablePlayers.get(j).getName().replaceAll(".json", "").equals(p.getName())) {
 								availablePlayers.remove(j);
 							}
-						
 						}
 						p.setColor(this.getColor(p, result));
 						this.board.getScore().setPlayer(p);
 					}
+					this.board.getScore().setActPlayer(this.board.getScore().getPlayers()[0]);
 					// start game
 					if(result != 99) {
 						this.resume();
@@ -514,28 +514,28 @@ public class Game {
 		int result;
 		do {
 			// plot board
-			this.board.plotScore2Console(this.menu.playerMenu(this.board.getActPlayer()));
-			// print player functions
-			result = this.menu.selectMenu(this.menu.playerMenu(this.board.getActPlayer()), "");
+			this.board.plotScore2Console(this.menu.playerMenu(this.board.getScore().getActPlayer()));
+			result = this.menu.selectMenu(this.menu.playerMenu(this.board.getScore().getActPlayer()), "");
 			//result = this.menu.getKey(this.menu.playerMenu(this.board.getActPlayer()));
 			switch(result) {
 			// roll
 			case 0:
 				// play
 				int roll = this.board.getScore().roll();
+				roll = 6;
 				// set attribute timesRolled6 +1
 				if(roll == 6) {
-					this.board.getActPlayer().setTimesRolled6(this.board.getActPlayer().getTimesRolled6() +1);
+					this.board.getScore().getActPlayer().setTimesRolled6(this.board.getScore().getActPlayer().getTimesRolled6() +1);
 				}
 				int tokenNumber = -1;
 				int token = 0;
 				ArrayList<Integer> tokenList;
 				do {
-					tokenList = this.checkAvailableToken(this.board.getActPlayer(), roll);
+					tokenList = this.checkAvailableToken(this.board.getScore().getActPlayer(), roll);
 					// check if a token is move able
 					if(tokenList.size() > 0) {
 						// plot board with token and dice
-						this.board.plotScore2Console(this.menu.tokenMenu(tokenList, roll, this.board.getActPlayer()));
+						this.board.plotScore2Console(this.menu.tokenMenu(tokenList, roll, this.board.getScore().getActPlayer()));
 						//System.out.println("Only token: " + tokenList.toString() + "available");
 						tokenNumber = this.menu.inputToken(tokenList);
 					} else {
@@ -550,11 +550,14 @@ public class Game {
 					// no pass
 					} else {
 						// get token
-						token = tokenNumber + (this.board.getActPlayer().getId()*10);
+						token = tokenNumber + (this.board.getScore().getActPlayer().getId()*10);
 					}
 				// while !move was successful
 				} while(!this.board.getScore().move(token, roll));
 				// after successful move set next player
+				if(this.board.didWin()) {
+					break;
+				}
 				this.board.nextPlayer();
 				break;
 			// back to menu
@@ -567,9 +570,25 @@ public class Game {
 		// while no player win
 		} while(!quit & !this.board.didWin());
 		
-		// do something when player win
-		// fancy player display who win
-		//@
+		if(this.board.didWin()) {
+			// set wins attribute +1
+			this.board.getScore().getActPlayer().setWins(this.board.getScore().getActPlayer().getWins() + 1);
+			// set total played +1 for every player who played
+			for(Player p: this.board.getScore().getPlayers()) {
+				p.setTotalPlayed(p.getTotalPlayed() +1);
+			}
+			
+			do {
+				// display fancy win menu
+				this.board.plotScore2Console(this.menu.fancyWinMenu(this.board.getScore().getActPlayer()));
+				result = this.menu.selectMenu(this.menu.fancyWinMenu(this.board.getScore().getActPlayer()), "");
+			} while(result != 99);
+			// @		
+			// remove score
+			this.board.setScore(new Score());
+			
+			
+		}
 	}
 	
 	public void sleep(int ms) {
