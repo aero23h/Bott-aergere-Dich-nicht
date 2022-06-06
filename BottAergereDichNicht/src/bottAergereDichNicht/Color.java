@@ -1,3 +1,4 @@
+package bottAergereDichNicht;
 
 public class Color {
 	private ColorItem red;

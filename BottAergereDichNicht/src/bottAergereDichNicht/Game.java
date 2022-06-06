@@ -1,4 +1,4 @@
-package v2;
+package bottAergereDichNicht;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -29,7 +29,7 @@ public class Game {
 		// collect all files
 		this.playerList = new PlayerList();
 		if(!this.playerList.loadPlayerList(this.playerPath)) {
-			// @ AI import
+			// AI import
 			this.playerList.addNewPlayer(new Player("Minion-Bob (AI)"));
 			this.playerList.addNewPlayer(new Player("Minion-Stuart (AI)"));
 			this.playerList.addNewPlayer(new Player("Minion-Kevin (AI)"));
@@ -142,15 +142,15 @@ public class Game {
 							index = j;
 						}
 					}
-					// plot startroll list
-					// @
-					System.out.println(startRolls.toString());
-					// start player set
-					this.board.getScore().setActPlayer(this.board.getScore().getPlayers()[index]);
-					System.out.println(this.board.getScore().getActPlayer().getName() + " will start.");
-					this.sleep(1500);
 					// start game
 					if(result != 99) {
+						// plot startRoll list
+						this.menu.plotHeader();
+						System.out.println("\t\t\t"+startRolls.toString());
+						// start player set
+						this.board.getScore().setActPlayer(this.board.getScore().getPlayers()[index]);
+						System.out.println("\t\t\t"+this.board.getScore().getActPlayer().getName() + " will start.");
+						this.sleep(2000);
 						this.resume();
 					}
 					result = 99;
@@ -383,10 +383,6 @@ public class Game {
 				// AI will roll the dice;
 				result = 0;
 			}
-			// check if no token is lost
-			// @
-			this.checkTokenAmount();
-			
 			switch(result) {
 			// roll
 			case 0:
@@ -409,7 +405,7 @@ public class Game {
 							tokenIDCode = this.menu.inputToken(tokenList);
 						} else {
 							tokenIDCode = tokenList.get(this.board.getScore().getRandomNumberInRange(0, tokenList.size()-1));
-							this.sleep(0);
+							this.sleep(200);
 						}
 					} else {
 						tokenIDCode[0] = 64;
@@ -447,13 +443,15 @@ public class Game {
 		} while(!quit & !this.board.didWin());
 		
 		if(this.board.didWin()) {
-			// set wins attribute +1
-			this.board.getScore().getActPlayer().setWins(this.board.getScore().getActPlayer().getWins() + 1);
-			// set total played +1 for every player who played
-			for(Player p: this.board.getScore().getPlayers()) {
-				p.setTotalPlayed(p.getTotalPlayed() +1);
+			if(!this.board.getScore().isFinished()) {
+				// set wins attribute +1
+				this.board.getScore().getActPlayer().setWins(this.board.getScore().getActPlayer().getWins() + 1);
+				// set total played +1 for every player who played
+				for(Player p: this.board.getScore().getPlayers()) {
+					p.setTotalPlayed(p.getTotalPlayed() +1);
+				}
+				this.board.getScore().setFinished(true);
 			}
-			
 			do {
 				// display fancy win menu
 				this.board.plotScore2Console(this.menu.fancyWinMenu(this.board.getScore().getActPlayer()));

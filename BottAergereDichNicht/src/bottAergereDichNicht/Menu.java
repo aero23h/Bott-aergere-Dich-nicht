@@ -1,4 +1,4 @@
-package v2;
+package bottAergereDichNicht;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -250,7 +250,11 @@ public class Menu {
 			loadMenu.add(new MenuItem("no game available!", "" , -1 ));
 		}
 		for(int i=0; i<files.size(); i++) {
-			loadMenu.add(new MenuItem(files.get(i).getCreateTime(), ""+(i+1) , i ));
+			if(files.get(i).isFinished()) {
+				loadMenu.add(new MenuItem(files.get(i).getCreateTime() + "\t('"+files.get(i).getActPlayer().getName() + "' won the game)" , ""+(i+1) , i ));
+			} else {
+				loadMenu.add(new MenuItem(files.get(i).getCreateTime() + "\t(still running)", ""+(i+1) , i ));
+			}
 		}
 		return loadMenu;
 	}
@@ -287,7 +291,7 @@ public class Menu {
 		ArrayList<MenuItem> tokenMenu = new ArrayList<>();
 		tokenMenu.add(new MenuItem("*** " + p.getColor().getCode() + p.getName() + color.reset() + " ***", "@", -1));
 		for(int[] token: tokens) {
-			tokenMenu.add(new MenuItem("Token: " + (token[0]%10) + " " +token[1], ""+(token[0]%10), -1));
+			tokenMenu.add(new MenuItem("Token: "+(token[0]%10), ""+(token[0]%10), -1));
 		}
 		tokenMenu.add(new MenuItem("", "@", -1));
 		ArrayList<String> dice = this.getDice(roll);

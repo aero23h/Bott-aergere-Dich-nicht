@@ -1,4 +1,4 @@
-package v2;
+package bottAergereDichNicht;
 public class Main {
 
 	public static void main(String[] args){
@@ -20,7 +20,6 @@ public class Main {
 		
 			// add multiple roll on 6
 		
-			// fix move kick
 	}
 	
 	/* Rules 
@@ -30,9 +29,9 @@ public class Main {
 		
 		3. Wird nach dreimaligem Würfeln keine 6 gewürfelt, ist der*die nächste Spieler*in an der Reihe.
 		
-		Done: 4. (Pflicht) Beim Würfeln einer 6 muss eine Figur aus den Eckkreisen auf das Startfeld der eigenen Spielfarbe, auf dem Spielfeld gesetzt werden (Ausnahme siehe 10 „Schlagpflicht“).
+		4. (Pflicht) Beim Würfeln einer 6 muss eine Figur aus den Eckkreisen auf das Startfeld der eigenen Spielfarbe, auf dem Spielfeld gesetzt werden (Ausnahme siehe 10 „Schlagpflicht“).
 		
-		Done: 5. (Pflicht) Das Startfeld muss immer frei gemacht werden, (Ausnahme siehe 10 „Schlagpflicht“) solange sich eine Spielfigur auf einem der Eckkreise befindet. Wer dieser Pflicht nicht nachkommt, muss seine Spielfigur zurück auf seinen eigenen Eckkreis stellen und darf erst wieder nach würfeln einer 6 auf das Spielfeld zurück
+		5. (Pflicht) Das Startfeld muss immer frei gemacht werden, (Ausnahme siehe 10 „Schlagpflicht“) solange sich eine Spielfigur auf einem der Eckkreise befindet. Wer dieser Pflicht nicht nachkommt, muss seine Spielfigur zurück auf seinen eigenen Eckkreis stellen und darf erst wieder nach würfeln einer 6 auf das Spielfeld zurück
 		
 		Done: 6. Solange sich eine der eigenen Spielfiguren auf dem Spielfeld befindet und die Möglichkeit zum Vorrücken besteht, darf lediglich 1-mal gewürfelt werden. Dies gilt auch, wenn eine oder mehrere Figuren ihre Zielfelder erreicht haben, und dort noch vorrücken können. Wer mehrere Figuren auf dem Spielfeld hat, kann sich aussuchen, mit welcher Figur er weiterzieht.
 		

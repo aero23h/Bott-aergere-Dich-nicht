@@ -1,4 +1,4 @@
-package v2;
+package bottAergereDichNicht;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,6 +19,7 @@ public class Score {
 	private Player noPlayer;
 	private String createTime;
 	private Player actPlayer;
+	private boolean finished;
 	
 	public Score() {
 		this.color = new Color();
@@ -28,6 +29,7 @@ public class Score {
 		// default init
 		this.init(4);
 		this.actPlayer = this.players[0];
+		this.finished = false;
 	}
 	
 	public void init(int playerCount) {
@@ -90,8 +92,6 @@ public class Score {
 		}
 		return false;
 	}
-	// @
-	// setplayer
 	public void save2File(String path){
 	    if(!this.checkDirExist(path)) {
 	    	new File(path).mkdirs();
@@ -300,143 +300,6 @@ public class Score {
 			break;
 		}
 		return returnValue;
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		/*
-		// pass move
-		if(token == 0) {
-			return true;
-		}
-		// init values
-		int pos = -1;
-		int tokenPos = -1;
-		int playerID = token/10;
-		
-		int startPos = this.findToken(token, this.startBoard);
-		int onPos = this.findToken(token, this.onBoard);
-		int goalPos = this.findToken(token, this.goalBoard);
-		
-		if(startPos != -1) {
-			pos = 0;
-			tokenPos = startPos;
-		}
-		if(onPos != -1) {
-			pos = 1;
-			tokenPos = onPos;
-		}
-		if(goalPos != -1) {
-			pos = 2;
-			tokenPos = goalPos;
-		}
-		switch(pos) {
-		// startBoard
-		case 0:
-			if(steps == 6) {
-				// check joinOnBoard position is 0			
-				if(this.onBoard[playerID*10] == 0){
-					this.onBoard[playerID*10] = token;
-					this.startBoard[tokenPos] = 0;
-					return true;
-				} else {
-					if(playerID != (this.onBoard[playerID*10]/10)) {
-						int enemyToken = this.onBoard[playerID*10];
-						int enemyPlayer = enemyToken/10;
-						
-						// kick token and swap place
-						if(this.startBoard[(enemyPlayer*4 + enemyToken%10)%16] == 0) {
-							this.startBoard[(enemyPlayer*4 + enemyToken%10)%16] = enemyToken;
-							this.onBoard[playerID*10] = token;
-							this.startBoard[tokenPos] = 0;
-							return true;
-						}
-					}
-				} 
-			}
-			break;
-		// onBoard
-		case 1:
-			// move token x steps
-			int newPos = (tokenPos + steps) % 40;
-			int boardSteps = (tokenPos + 40 - ((playerID*10) % 40)) % 40;
-			int target = (newPos + 40 - ((playerID*10) % 40)) % 40;
-			// check if token move more than 40
-			if(boardSteps > target) {
-				// check if run over goal length
-				if((target + (playerID*4)%16)<=(playerID*4+3%16)) {
-					// check if tokenPos on goalBoard is blocked		
-					if(this.goalBoard[(target + (playerID)*4) % 16] == 0) {
-						// is not blocked
-						this.onBoard[tokenPos] = 0;
-						this.goalBoard[(target + (playerID)*4) % 16] = token;
-						return true;
-					}
-				}
-				// overshoot goalBoard or blocked
-				return false;
-			}
-			// check if newPos is blocked
-			if(this.onBoard[newPos] == 0) {
-				this.onBoard[newPos] = token;
-				this.onBoard[tokenPos] = 0;
-				return true;
-			}
-			// position is blocked --> kick?
-			int enemyToken = this.onBoard[newPos];
-			int enemyPlayer = enemyToken/10;
-			// do not kick your own token
-			if((playerID) == (enemyPlayer)) {
-				return false;
-			}
-			// kick token and swap place
-			if(this.startBoard[(enemyPlayer*4 + enemyToken%10)%16] == 0) {
-				this.startBoard[(enemyPlayer*4 + enemyToken%10)%16] = enemyToken;
-				this.onBoard[newPos] = token;
-				this.onBoard[tokenPos] = 0;
-				return true;
-			}
-			break;
-		// goalBoard
-		case 2:
-			// move token in goalBoard
-			int newGoalPos = tokenPos + steps;
-			// check if move is possible
-			if(newGoalPos <= (playerID*4+3)%16) {
-				if(playerID == (this.goalBoard[newGoalPos]/10)) {
-					return false;
-				}
-				this.goalBoard[tokenPos] = 0;
-				this.goalBoard[newGoalPos] = token;
-				return true;
-			}
-			break;
-		}
-		return false;*/
 	}
 	
 	// #######################################################################################################################################
@@ -495,6 +358,14 @@ public class Score {
 
 	public void setActPlayer(Player actPlayer) {
 		this.actPlayer = actPlayer;
+	}
+
+	public boolean isFinished() {
+		return this.finished;
+	}
+
+	public void setFinished(boolean finished) {
+		this.finished = finished;
 	}
 
 

@@ -1,4 +1,4 @@
-package v2;
+package bottAergereDichNicht;
 
 public class Player {
 	private String name;
