@@ -48,6 +48,48 @@ public class Menu {
 		System.out.println(menuLine);
 	}
 	
+	public void plotStartRolls(Player[] players, Player rollChampion, ArrayList<Integer> rollList, int index) {
+		String s = "";
+		String tabs = "";
+		// plot header
+		this.plotHeader();
+		// build dice string
+		ArrayList<ArrayList<String>> dices = new ArrayList<ArrayList<String>>();
+		// add all dice to dices
+		for(Integer n: rollList) {
+			dices.add(this.getDice(n));
+		}
+		// add to s all player names and set tabs depending of there playerNameLength
+		for(Player p: players) {
+			int newTab = 3 - (p.getName().length()/8);
+			tabs = "";
+			for(int j=0; j<newTab; j++){
+				tabs += "\t";
+			}
+			s += p.getColor().getCode() + p.getName() + color.reset() +":" + tabs;
+		}
+		s += "\n";
+		// add dices to s
+		for(int row=0; row<dices.get(0).size(); row++) {
+			for(ArrayList<String> dice: dices) {
+				s += dice.get(row) + "\t\t";
+			}
+			s += "\n";
+		}
+		s += "\n";
+		// add winner dice to s and the winning name
+		for(int i=0; i<dices.get(0).size(); i++) {
+
+			if(i==2) {
+				s += "\t\t"+ dices.get(index).get(i) + "\t"+ rollChampion.getColor().getCode() + rollChampion.getName() + color.reset() + " will start the game.\n";
+			} else {
+				s += "\t\t"+ dices.get(index).get(i) + "\n";
+			}
+		}
+		// plot s
+		System.out.println(s);
+	}
+
 	public int selectMenu(ArrayList<MenuItem> menuItems, String header) {
 		// header == "" -> no header
 		if(header != "") {
@@ -118,7 +160,7 @@ public class Menu {
 	
 	public int[] checkTokenInList(ArrayList<int[]> tokenList, int result) {
 		for(int[] a: tokenList) {
-			if(a[0] == result) {
+			if((a[0]%10) == result) {
 				return new int[] {a[0], a[1]};
 			}
 		}
@@ -215,6 +257,7 @@ public class Menu {
 		playerMenu.add(new MenuItem("back to menu", "b", 99));
 		return playerMenu;
 	}
+
 	
 	// ################################################################################################################
 	

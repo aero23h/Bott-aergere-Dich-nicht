@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class Game {
-	private Board board;
-	private Menu menu;
+	public Board board;
+	public Menu menu;
 	private String scorePath;
 	private String playerPath;
 	private PlayerList playerList;
@@ -85,7 +85,7 @@ public class Game {
 						tokenIDCode[0] = 64;
 						System.out.print("Your rolled: "+ roll + ". No move is possible. Skipping...");
 						// delay to read the not movable text better
-						this.sleep(500);
+						this.sleep(800);
 					}
 					// pass
 					if(tokenIDCode[0] == 64) {
@@ -243,13 +243,12 @@ public class Game {
 					}
 					// start game
 					if(result != 99) {
-						// plot startRoll list
-						this.menu.plotHeader();
-						System.out.println("\t\t\t"+startRolls.toString());
+
 						// start player set
 						this.board.getScore().setActPlayer(this.board.getScore().getPlayers()[index]);
-						System.out.println("\t\t\t"+this.board.getScore().getActPlayer().getName() + " will start.");
-						this.sleep(2500);
+						// plot startRoll list
+						this.menu.plotStartRolls(this.board.getScore().getPlayers(), this.board.getScore().getActPlayer(), startRolls, index);
+						this.sleep(4000);
 						this.resume();
 					}
 					result = 99;
