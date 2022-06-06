@@ -38,7 +38,6 @@ public class Game {
 	}
 	
 	// ########################################################################################################################
-
 	
 	public void run(){
 		// mainMenu
@@ -206,7 +205,6 @@ public class Game {
 		return this.playerList.getPlayerList().get(result);
 	}
 
-	
 	public void resume() {
 		if(this.playerList.findPlayer(this.board.getScore().getActPlayer().getName()) != null) {
 			this.playGame();
@@ -367,6 +365,7 @@ public class Game {
 	
 	
 	public void playGame(){
+		this.playerList.allPlayersVisible();
 		// while player did not win
 		boolean quit = false;
 		boolean ai = false;
@@ -384,6 +383,10 @@ public class Game {
 				// AI will roll the dice;
 				result = 0;
 			}
+			// check if no token is lost
+			// @
+			this.checkTokenAmount();
+			
 			switch(result) {
 			// roll
 			case 0:
@@ -393,9 +396,9 @@ public class Game {
 				if(roll == 6) {
 					this.board.getScore().getActPlayer().setTimesRolled6(this.board.getScore().getActPlayer().getTimesRolled6() +1);
 				}
-				int tokenNumber = -1;
+				int[] tokenIDCode = new int[2];
 				int token = 0;
-				ArrayList<Integer> tokenList;
+				ArrayList<int[]> tokenList;
 				do {
 					tokenList = this.checkAvailableToken(this.board.getScore().getActPlayer(), roll);
 					// check if a token is move able
@@ -403,27 +406,27 @@ public class Game {
 						// plot board with token and dice
 						this.board.plotScore2Console(this.menu.tokenMenu(tokenList, roll, this.board.getScore().getActPlayer()));
 						if(!ai) {
-							tokenNumber = this.menu.inputToken(tokenList);
+							tokenIDCode = this.menu.inputToken(tokenList);
 						} else {
-							tokenNumber = tokenList.get(this.board.getScore().getRandomNumberInRange(0, tokenList.size()-1));
-							this.sleep(200);
+							tokenIDCode = tokenList.get(this.board.getScore().getRandomNumberInRange(0, tokenList.size()-1));
+							this.sleep(0);
 						}
 					} else {
-						tokenNumber = 64;
+						tokenIDCode[0] = 64;
 						System.out.print("Your rolled: "+ roll + ". No move is possible. Skipping...");
 						// delay to read the not movable text better
 						this.sleep(100);
 					}
 					// pass
-					if(tokenNumber == 64) {
+					if(tokenIDCode[0] == 64) {
 						token = 0;
 					// no pass
 					} else {
-						// get token
-						token = tokenNumber + (this.board.getScore().getActPlayer().getId()*10);
+						token = tokenIDCode[0];
 					}
 				// while !move was successful
-				} while(!this.board.getScore().move(token, roll));
+				} while(!this.board.getScore().move(token, roll, tokenIDCode[1]));
+				
 				// after successful move set next player
 				if(this.board.didWin()) {
 					break;
@@ -455,37 +458,37 @@ public class Game {
 				// display fancy win menu
 				this.board.plotScore2Console(this.menu.fancyWinMenu(this.board.getScore().getActPlayer()));
 				result = this.menu.selectMenu(this.menu.fancyWinMenu(this.board.getScore().getActPlayer()), "");
-			} while(result != 99);	
+			} while(result != 99);
 		}
 	}
 	
-	public ArrayList<Integer> checkAvailableToken(Player p, int steps){
-		ArrayList<Integer> tokenList = new ArrayList<>();
-		ArrayList<Integer> resultList = new ArrayList<>();
+	public void checkTokenAmount() {
+		int count = 0;
+		for(int e: this.board.getScore().getOnBoard()) {
+			count += e;
+		}
+		for(int e: this.board.getScore().getGoalBoard()) {
+			count += e;
+		}
+		for(int e: this.board.getScore().getStartBoard()) {
+			count += e;
+		}
+		if(count != 280) {
+			int missingToken = 280 - count;
+			System.out.println(missingToken + " is missing!");
+			this.sleep(5000);
+		}
+	}
+	
+	public ArrayList<int[]> checkAvailableToken(Player p, int roll){
+		ArrayList<int[]> tokenList = new ArrayList<>();
 		int token = 0;
+		int moveCode = -1;
 		for(int tokenNumber=1; tokenNumber<5;tokenNumber++) {
 			token = tokenNumber + (p.getId()*10);
-			if(this.board.getScore().checkMove(token, steps)){
-				tokenList.add(tokenNumber);
-				}
-		}
-		if(tokenList.size() > 1) {
-			for(int i=0; i<tokenList.size(); i++) {
-				token = tokenList.get(i);
-				if(this.board.getScore().findToken(tokenList.get(i), this.board.getScore().getOnBoard()) == (p.getId()*10)) {
-					resultList.add(token);
-					return resultList;
-				}
-			}
-			// rule 4: from startBoard to onBoard if steps is 6
-			if(steps == 6) {
-				for(int i=0; i<tokenList.size(); i++) {
-					token = tokenList.get(i);
-					if(this.board.getScore().findToken(tokenList.get(i), this.board.getScore().getStartBoard()) != 0) {
-						resultList.add(token);
-					}
-				}
-				return resultList;
+			moveCode = this.board.getScore().checkMove(token, roll);
+			if(moveCode != -1) {
+				tokenList.add(new int[] {token, moveCode});
 			}
 		}
 		return tokenList;

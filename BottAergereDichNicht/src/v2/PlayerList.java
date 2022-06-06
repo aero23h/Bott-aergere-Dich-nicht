@@ -94,7 +94,6 @@ public class PlayerList {
 			this.playerList = ld.getPlayerList();
 			return true;
 		} catch (IOException e) {
-			//e.printStackTrace();
 		}
 		return false;
 	}

@@ -6,6 +6,14 @@ public class Main {
 		Game g = new Game();
 		// start the game
 		g.run();
+		
+		//g.getBoard().getScore().move(02, 6, 100);
+		//g.getBoard().getScore().move(32, 6, 100);
+		//g.getBoard().getScore().move(02, 3, 210);
+		//g.getBoard().getScore().move(32, 12, 210);
+		//g.getBoard().getScore().move(32, 1, 220);
+		//g.getBoard().plotScore2Console(g.getMenu().playerMenu(g.getBoard().getScore().getActPlayer()));
+
 
 	    // to do
 			// add something while quitting

@@ -38,7 +38,7 @@ public class Score {
 		this.players[3] = new Player("", color.getYellow(), 3);
 		
 		// TokenNumber AB-A is PlayerID, B is TokenNumber eg 13 - playerID B token 3
-		this.startBoard = new int[] {01,02,03,04,11,12,13,14,21,22,23,24,31,33,32,34};
+		this.startBoard = new int[] {01,02,03,04,11,12,13,14,21,22,23,24,31,32,33,34};
 		// Init startBoard between 2-4 playerID
 		if(playerCount>1 && playerCount<4) {
 			// remove token from list
@@ -149,7 +149,7 @@ public class Score {
 	}
 	
 	public int findToken(int token, int[] board) {
-		// find token in onStartBoard
+		// find token in board
 		for(int i=0;i < board.length; i++) {
 			if(board[i] == token) {
 				return i;
@@ -158,94 +158,177 @@ public class Score {
 		return -1;
 	}
 	
-	public boolean checkMove(int token, int steps) {
-		// pass move
-		if(token == 0) {
-			return true;
-		}
-		// init values
-		int pos = -1;
-		int tokenPos = -1;
-		int playerID = token/10;
+	
+	
+	public int checkMove(int token, int roll) {
+		int boardPos = -1;
+		int playerId = token/10;
 		
-		int startPos = this.findToken(token, this.startBoard);
-		int onPos = this.findToken(token, this.onBoard);
-		int goalPos = this.findToken(token, this.goalBoard);
-		
-		if(startPos != -1) {
-			pos = 0;
-			tokenPos = startPos;
-		}
-		if(onPos != -1) {
-			pos = 1;
-			tokenPos = onPos;
-		}
-		if(goalPos != -1) {
-			pos = 2;
-			tokenPos = goalPos;
-		}
-		
-		switch(pos) {
-		// startBoard
-		case 0:
-			if(steps == 6) {
-				if((this.onBoard[playerID*10] == 0) || (playerID != (this.onBoard[playerID*10]/10))) {
-					return true;
-				}
+		// ##################################################
+		// search in startBoard
+		boardPos = this.findToken(token, this.startBoard);
+		// token in Starboard
+		if(boardPos != -1) {
+			if(roll != 6) {
+				return -1;
 			}
-			break;
-		// onBoard
-		case 1:
-			// move token x steps
-			int newPos = (tokenPos + steps) % 40;
-			int boardSteps = (tokenPos + 40 - ((playerID*10) % 40)) % 40;
-			int target = (newPos + 40 - ((playerID*10) % 40)) % 40;
+			// token on A
+			if(this.onBoard[playerId*10] == 0) {
+				// join token
+				return 100;
+			}
+			// is own token
+			if(playerId != (this.onBoard[playerId*10]/10)) {
+				return 110;
+			}
+		}
+		// ##################################################
+		// search in onBoard
+		boardPos = this.findToken(token, this.onBoard);
+		if(boardPos != -1) {
+			int newPos = (boardPos + roll) % 40;
+			int boardSteps = (boardPos + 40 - ((playerId*10) % 40)) % 40;
+			int target = (newPos + 40 - ((playerId*10) % 40)) % 40;
+			
 			// check if token move more than 40
 			if(boardSteps > target) {
-				// check if run over goal length
-				if((target + (playerID*4)%16)<=(playerID*4+3%16)) {
+				// check in range of goalBoard
+				if((target + (playerId*4)%16)<=(playerId*4+3%16)) {
 					// check if tokenPos on goalBoard is blocked		
-					if(this.goalBoard[(target + (playerID)*4) % 16] == 0) {
-						// is not blocked
-						return true;
+					if(this.goalBoard[(target + (playerId)*4) % 16] == 0) {
+						// join goal
+						return 200;
 					}
 				}
-				// overshoot goalBoard or blocked
-				return false;
-			}
-			// check if newPos is blocked
-			if(this.onBoard[newPos] == 0) {
-				return true;
-			}
-			// position is blocked --> kick?
-			int enemyToken = this.onBoard[newPos];
-			int enemyPlayer = enemyToken/10;
-			// do not kick your own token
-			if((playerID) == (enemyPlayer)) {
-				return false;
-			}
-			// kick token and swap place
-			if(this.startBoard[(enemyPlayer*4)%16] == 0) {
-				return true;
-			}
-			break;
-		// goalBoard
-		case 2:
-			// move token in goalBoard
-			int newGoalPos = tokenPos + steps;
-			// check if move is possible
-			if(newGoalPos <= (playerID*4+3)%16) {
-				if(playerID == (this.goalBoard[newGoalPos]/10)) {
-					return false;
+			} else {
+				// newPos Free
+				if(this.onBoard[newPos] == 0) {
+					// move
+					return 210;
 				}
-				return true;
+				// is own token
+				if(playerId != (this.onBoard[newPos]/10)) {
+					// kick and swap
+					return 220;
+				}
 			}
-			break;
 		}
-		return false;
+		// ##################################################
+		// search in onGoal
+		boardPos = this.findToken(token, this.goalBoard);
+		if(boardPos != -1) {
+			int newGoalPos = boardPos + roll;
+			// check if move in range
+			if(newGoalPos <= (playerId*4+3)%16) {
+				if(this.goalBoard[newGoalPos] == 0) {
+					// move
+					return 300;
+				}
+			}
+		}
+		return -1;
 	}
 	
-	public boolean move(int token, int steps) {
+	public void kickToken(int token) {
+		// AB A=PlyerID B=TokenValue
+		// 21 A=2 B=1
+		int playerId = token/10;
+		int tokenValue = token%10;
+		int tokenKickPos = (playerId*4+tokenValue %16)-1;
+		this.startBoard[tokenKickPos] = token;
+	}
+	
+	
+	public boolean move(int token, int roll, int switchValue) {
+		int playerId = token / 10;
+		int tokenPos = 0;
+		boolean returnValue = false;
+		
+		switch(switchValue) {
+		// pas
+		case 0:
+			returnValue = true;
+			break;
+		// join onBoard
+		case 100:
+			tokenPos = this.findToken(token, this.startBoard);
+			this.onBoard[playerId*10] = token;
+			this.startBoard[tokenPos] = 0;
+			returnValue = true;
+			break;
+		// kick and join onBoard
+		case 110:
+			// join
+			tokenPos = this.findToken(token, this.startBoard);
+			this.startBoard[tokenPos] = 0;
+			this.kickToken(this.onBoard[playerId*10]);
+			this.onBoard[playerId*10] = token;
+			returnValue = true;
+			break;
+		// join goalBoard
+		case 200:
+			tokenPos = this.findToken(token, this.onBoard);
+			int newPos = (tokenPos + roll) % 40;
+			int target = (newPos + 40 - ((playerId*10) % 40)) % 40;
+			
+			tokenPos = this.findToken(token, this.onBoard);
+			this.onBoard[tokenPos] = 0;
+			this.goalBoard[(target + (playerId)*4) % 16] = token;
+			returnValue = true;
+			break;
+		// move
+		case 210:
+			tokenPos = this.findToken(token, this.onBoard);
+			this.onBoard[tokenPos] = 0;
+			this.onBoard[(tokenPos + roll)%40] = token;
+			returnValue = true;
+			break;
+		// kick and move onBoard
+		case 220:
+			tokenPos = this.findToken(token, this.onBoard);
+			this.kickToken(this.onBoard[(tokenPos + roll)%40]);
+			this.onBoard[tokenPos] = 0;
+			this.onBoard[(tokenPos+roll) %40] = token;
+			returnValue = true;
+			break;
+		// move in goal
+		case 300:
+			tokenPos = this.findToken(token, this.goalBoard);
+			this.goalBoard[tokenPos] = 0;
+			this.goalBoard[(tokenPos + roll)%16] = token;
+			returnValue = true;
+			break;
+		}
+		return returnValue;
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		/*
 		// pass move
 		if(token == 0) {
 			return true;
@@ -353,8 +436,10 @@ public class Score {
 			}
 			break;
 		}
-		return false;
+		return false;*/
 	}
+	
+	// #######################################################################################################################################
 
 	public int[] getStartBoard() {
 		return this.startBoard;

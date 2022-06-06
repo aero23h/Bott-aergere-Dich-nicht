@@ -47,12 +47,21 @@ public class Menu {
 		return result;
 	}
 	
-	public int inputToken(ArrayList<Integer> tokens) {
-		int result = -1;
+	public int[] checkTokenInList(ArrayList<int[]> tokenList, int result) {
+		for(int[] a: tokenList) {
+			if(a[0] == result) {
+				return new int[] {a[0], a[1]};
+			}
+		}
+		return new int[] {-1, -1};
+	}
+	
+	public int[] inputToken(ArrayList<int[]> tokenList) {
+		int[] result = new int[] {-1,-1};
 		do {
 			try {
 				System.out.print("Please select token: ");
-				result = keyReader.read() - 48; // 48 is ascii 0 transfer acii to int
+				result[0] = keyReader.read() - 48; // 48 is ascii 0 transfer acii to int
 				int dummy = -1;
 				do {
 					dummy = keyReader.read();
@@ -60,10 +69,11 @@ public class Menu {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			if(!tokens.contains(result)) {
+			result = this.checkTokenInList(tokenList, result[0]);
+			if(result[0] == -1) {
 				System.err.println("Invalid token!");
 			}
-		} while(!tokens.contains(result));
+		} while(result[0] == -1);
 		return result;
 	}
 	
@@ -153,7 +163,7 @@ public class Menu {
 	public ArrayList<MenuItem> highScoreMenu(ArrayList<Player> players){
 		ArrayList<MenuItem> highScoreMenu = new ArrayList<>();
 		highScoreMenu.add(new MenuItem("back to menu", "b", 99));
-		highScoreMenu.add(new MenuItem("\rName:\t\t\t\twins\t\trolled 6:\tplayed:", "", -1));
+		highScoreMenu.add(new MenuItem("\rName\t\t\t\twins\t\trolled 6\tplayed", "", -1));
 		for(int i=0; i<players.size(); i++) {
 			String name = players.get(i).getName();
 			String wins = ""+players.get(i).getWins();
@@ -273,11 +283,11 @@ public class Menu {
 		return fileList;
 	}
 	
-	public ArrayList<MenuItem> tokenMenu(ArrayList<Integer> tokens, int roll, Player p){
+	public ArrayList<MenuItem> tokenMenu(ArrayList<int[]> tokens, int roll, Player p){
 		ArrayList<MenuItem> tokenMenu = new ArrayList<>();
 		tokenMenu.add(new MenuItem("*** " + p.getColor().getCode() + p.getName() + color.reset() + " ***", "@", -1));
-		for(int token: tokens) {
-			tokenMenu.add(new MenuItem("Token: " + token, ""+token , -1));
+		for(int[] token: tokens) {
+			tokenMenu.add(new MenuItem("Token: " + (token[0]%10) + " " +token[1], ""+(token[0]%10), -1));
 		}
 		tokenMenu.add(new MenuItem("", "@", -1));
 		ArrayList<String> dice = this.getDice(roll);
