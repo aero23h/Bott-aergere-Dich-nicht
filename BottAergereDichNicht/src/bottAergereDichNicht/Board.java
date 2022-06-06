@@ -1,8 +1,9 @@
 package bottAergereDichNicht;
+
 import java.util.ArrayList;
 
 public class Board {
-	private String[][] emptyBoard;
+	private String[][] template;
 	private int[][] posStart;
 	private int[][] posBoard;
 	private int[][] posGoal;
@@ -12,7 +13,7 @@ public class Board {
 	public Board(){
 		this.color = new Color();
 		this.score = new Score();
-		this.emptyBoard = new String[][] {
+		this.template = new String[][] {
 			{"   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "( )", "---", "( )", "---", "y( )§", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   "},
 			{"   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", " | ", "   ", "   ", "   ", " | ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   "},
 			{"   ", "   ", "r( )§", "r( )§", "   ", "   ", "   ", "   ", "( )", "   ", "y( )§", "   ", "( )", "   ", "   ", "   ", "   ", "y( )§", "y( )§", "   ", "   "},
@@ -39,6 +40,8 @@ public class Board {
 		this.posBoard = new int[][] {{20,12}, {18,12}, {16,12}, {14,12}, {12,12}, {12,14}, {12,16}, {12,18}, {12,20},{10,20}, {8,20}, {8,18}, {8,16}, {8,14}, {8,12}, {6,12}, {4,12},{2,12},{0,12}, {0,10}, {0,8}, {2,8}, {4,8}, {6,8}, {8,8}, {8,6}, {8,4},{8,2},{8,0}, {10,0}, {12,0}, {12,2}, {12,4}, {12,6}, {12,8}, {14,8},{16,8},{18,8}, {20,8}, {20,10}};				
 		this.posGoal = new int[][] {{18,10}, {16,10}, {14,10}, {12,10},{10,18}, {10,16}, {10,14}, {10,12},{2,10}, {4,10}, {6,10}, {8,10},{10,2}, {10,4}, {10,6}, {10,8}};
 	}
+	
+	// ################################################################################################################
 	
 	public void nextPlayer() {
 		do {
@@ -77,7 +80,7 @@ public class Board {
 		// clear console
 		this.clearConsole();
 		// startup
-		String[][] actualBoard = this.copyOf(this.emptyBoard);
+		String[][] actualBoard = this.copyOf(this.template);
 		// update start
 		for(int i=0;i<this.score.getStartBoard().length; i++) {
 			int token = this.score.getStartBoard()[i];
@@ -125,19 +128,21 @@ public class Board {
 			} else {
 				line += "\t\t "+ text;
 			}
-
 		}	
 		System.out.println(line);
 		}
-		
 	}
 	
 	public void clearConsole() {
+		String clear = "";
 		for(int i=0; i<20;i++) {
-			System.out.println();
+			clear += "\n";
 		}
+		System.out.println(clear);
 	}
 
+	// ################################################################################################################
+	
 	public Score getScore() {
 		return this.score;
 	}
@@ -145,9 +150,4 @@ public class Board {
 	public void setScore(Score score) {
 		this.score = score;
 	}
-
-	public String[][] getEmptyBoard() {
-		return this.emptyBoard;
-	}
-
 }

@@ -18,6 +18,8 @@ public class PlayerList {
 	this.fileName = "bott-playerlist";
 	}
 	
+	// ################################################################################################################
+	
 	public void allPlayersVisible() {
 		for(Player p: this.playerList) {
 			p.setVisible(true);
@@ -30,7 +32,6 @@ public class PlayerList {
 			p.setVisible(visibility);
 		}
 	}
-	
 	
 	public boolean addNewPlayer(Player p) {
 		// check of double name in list
@@ -94,6 +95,7 @@ public class PlayerList {
 			this.playerList = ld.getPlayerList();
 			return true;
 		} catch (IOException e) {
+			// no action on fail, it will always fail on the first start time due to the creation time of the file.
 		}
 		return false;
 	}
@@ -105,26 +107,10 @@ public class PlayerList {
 		return false;
 	}
 	
-	
-	
-	
 	// ####################################################################################################
 
 	public ArrayList<Player> getPlayerList() {
 		return playerList;
 	}
 
-	public void setPlayerList(ArrayList<Player> playerList) {
-		this.playerList = playerList;
-	}
-
-
-	public String getFileName() {
-		return fileName;
-	}
-
-
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
 }

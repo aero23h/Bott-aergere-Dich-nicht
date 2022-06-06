@@ -14,42 +14,37 @@ public class Color {
 		this.yellow = new ColorItem("\u001b[33m","yellow");
 		this.reset = new ColorItem("\u001b[0m","reset");
 	}
+	
+	// ################################################################################################################
+	
 	public String getColoredName(ColorItem color){
 		return color.getCode() + color.getName() + this.reset();
-	}
-	
-	public ColorItem getRed() {
-		return this.red;
-	}
-	public void setRed(ColorItem red) {
-		this.red = red;
-	}
-	public ColorItem getGreen() {
-		return this.green;
-	}
-	public void setGreen(ColorItem green) {
-		this.green = green;
-	}
-	public ColorItem getBlue() {
-		return this.blue;
-	}
-	public void setBlue(ColorItem blue) {
-		this.blue = blue;
-	}
-	public ColorItem getYellow() {
-		return this.yellow;
-	}
-	public void setYellow(ColorItem yellow) {
-		this.yellow = yellow;
-	}
-	public ColorItem getReset() {
-		return this.reset;
-	}
-	public void setReset(ColorItem reset) {
-		this.reset = reset;
 	}
 	
 	public String reset() {
 		return this.reset.getCode();
 	}
+	
+	// ################################################################################################################
+	
+	public ColorItem getRed() {
+		return this.red;
+	}
+
+	public ColorItem getGreen() {
+		return this.green;
+	}
+
+	public ColorItem getBlue() {
+		return this.blue;
+	}
+
+	public ColorItem getYellow() {
+		return this.yellow;
+	}
+
+	public ColorItem getReset() {
+		return this.reset;
+	}
+
 }

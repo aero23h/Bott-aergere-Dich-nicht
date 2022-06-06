@@ -4,9 +4,7 @@ public class Player {
 	private String name;
 	private ColorItem color;
 	private int id;
-	// 
 	private boolean visible;
-	
 	// scoreBoard informations
 	private int wins;
 	private int totalPlayed;
@@ -24,14 +22,10 @@ public class Player {
 		this.name = name;
 	}
 	
-	public Player(String name, ColorItem color) {
-		this(name);
-		this.color = color;
-	}
-	
 	// Score use this constructor for creating his dummy players. id is always between 1-4 --> number of playing player
 	public Player(String name, ColorItem color, int id) {
-		this(name, color);
+		this(name);
+		this.color = color;
 		this.id = id;
 	}
 	
@@ -39,6 +33,7 @@ public class Player {
 	public String getName() {
 		return this.name;
 	}
+	
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -63,16 +58,13 @@ public class Player {
 		return this.wins;
 	}
 
-
 	public void setWins(int wins) {
 		this.wins = wins;
 	}
 
-
 	public int getTimesRolled6() {
 		return this.timesRolled6;
 	}
-
 
 	public void setTimesRolled6(int timesRolled6) {
 		this.timesRolled6 = timesRolled6;
@@ -87,13 +79,10 @@ public class Player {
 	}
 
 	public boolean isVisible() {
-		return visible;
+		return this.visible;
 	}
 
 	public void setVisible(boolean visible) {
 		this.visible = visible;
 	}
-
-
-
 }

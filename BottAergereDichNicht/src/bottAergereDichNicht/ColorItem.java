@@ -11,6 +11,8 @@ public class ColorItem {
 		this.code = code;
 		this.name = name;
 	}
+	
+	// ################################################################################################################
 
 	public String getCode() {
 		return this.code;
