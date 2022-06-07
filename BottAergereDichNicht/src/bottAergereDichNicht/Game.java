@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class Game {
-	public Board board;
-	public Menu menu;
+	private Board board;
+	private Menu menu;
 	private String scorePath;
 	private String playerPath;
 	private PlayerList playerList;
@@ -82,6 +82,7 @@ public class Game {
 							this.sleep(200);
 						}
 					} else {
+						// 64 is ascii 0. Code from version 1, but still working.
 						tokenIDCode[0] = 64;
 						System.out.print("Your rolled: "+ roll + ". No move is possible. Skipping...");
 						// delay to read the not movable text better
@@ -296,6 +297,7 @@ public class Game {
 						}
 					}
 				}
+				// set actPlayer
 				Player p = this.playerList.findPlayer(this.board.getScore().getActPlayer().getName());
 				if(p != null) {
 					this.board.getScore().setActPlayer(p);

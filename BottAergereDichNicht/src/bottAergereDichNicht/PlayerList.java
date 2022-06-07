@@ -69,7 +69,7 @@ public class PlayerList {
 				return pl;
 			}
 		}
-		// player with oldName not found
+		// player with name not found
 		return null;
 	}
 	
