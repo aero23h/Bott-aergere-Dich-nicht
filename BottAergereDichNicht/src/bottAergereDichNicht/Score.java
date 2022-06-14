@@ -24,7 +24,6 @@ public class Score {
 		this.color = new Color();
 		this.players = new Player[4];
 		this.noPlayer = new Player("", color.getReset(), -1);
-		this.createTime = LocalDateTime.now().withNano(0).toString().replaceAll(":", "-");
 		this.init(4);
 		this.actPlayer = this.players[0];
 		this.finished = false;
@@ -218,6 +217,8 @@ public class Score {
 		// initialize empty board arrays
 		this.goalBoard = new int[16];
 		this.onBoard = new int[40];
+		// initialize new names
+		this.createTime = LocalDateTime.now().withNano(0).toString().replaceAll(":", "-");
 	}
 	
 	public void setPlayer(Player newPlayer) {
