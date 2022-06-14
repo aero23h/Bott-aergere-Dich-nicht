@@ -45,6 +45,10 @@ public class Game {
 		boolean ai = false;
 		int result;
 		do {
+			// loaded finished game --> win menu
+			if(this.board.didWin()) {
+				break;
+			}
 			// plot board
 			this.board.plotScore2Console(this.menu.playerMenu(this.board.getScore().getActPlayer()));
 			if(!this.board.getScore().getActPlayer().getName().contains("(AI)")) {
